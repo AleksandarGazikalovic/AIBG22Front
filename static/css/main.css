@@ -1,0 +1,91 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+
+@font-face {
+
+    font-family: 'neuropolX';
+    src: url("../gif/NeuropolXBold.ttf");
+    font-weight: bold;
+    font-style: normal;
+}
+
+body, html {
+    background-size:cover;
+    background-image: url("../gif/ScreenBackground.png");  
+    width: 100%;
+}
+
+header{
+    width:100%;
+}
+main{
+    font-family: 'neuropolX';
+    color: white;
+    width: auto;
+    height: 985px;
+  
+    position:relative;
+    text-align: center;
+}
+
+.player{
+
+    position: absolute;
+    width: 608px;
+    height: 396px;
+}
+.player1{ 
+    background-image: url(../gif/PlayerBox/BoxPlayer1.svg);
+   top: 0;
+   left: 0;
+}
+.player3{
+    background-image: url(../gif/PlayerBox/BoxPlayer3.svg);
+    bottom: 0;
+    left: 0;
+}
+.player2{
+    background-image: url(../gif/PlayerBox/BoxPlayer2.svg);
+   top: 0;
+   right: 0;
+}
+.player4{
+    background-image: url(../gif/PlayerBox/BoxPlayer4.svg);
+   bottom: 0;
+   right: 0;
+}
+.logo{
+    position: absolute;
+    top:450px;
+    left:15px;
+}
+.canvas{
+    position: absolute;
+    left: 400px;
+    z-index: 5;
+}
+.infoBox{
+    position: absolute;
+    width: 370px;
+    height: 384px;
+    margin-top: 6px;
+    background-color: rgb(139, 133, 133, 20%);
+}
+.infoBoxR{
+    
+    position: absolute;
+    width: 370px;
+    height: 390px;
+    right: 0;
+}
+.timer{
+    
+    position: absolute;
+    top: 470px;
+    right: 3px;
+    font-size: 40px;
+    
+}

@@ -1,0 +1,96 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: neuropolX;
+  src: url("NeuropolXBold.6805e0d5.ttf");
+  font-weight: bold;
+  font-style: normal;
+}
+
+body, html {
+  width: 100%;
+  background-image: url("ScreenBackground.4a23f92b.png");
+  background-size: cover;
+}
+
+header {
+  width: 100%;
+}
+
+main {
+  color: #fff;
+  width: auto;
+  height: 985px;
+  text-align: center;
+  font-family: neuropolX;
+  position: relative;
+}
+
+.player {
+  width: 608px;
+  height: 396px;
+  position: absolute;
+}
+
+.player1 {
+  background-image: url("BoxPlayer1.fbdba71c.svg");
+  top: 0;
+  left: 0;
+}
+
+.player3 {
+  background-image: url("BoxPlayer3.3411945b.svg");
+  bottom: 0;
+  left: 0;
+}
+
+.player2 {
+  background-image: url("BoxPlayer2.ca848bd4.svg");
+  top: 0;
+  right: 0;
+}
+
+.player4 {
+  background-image: url("BoxPlayer4.bf7d79e8.svg");
+  bottom: 0;
+  right: 0;
+}
+
+.logo {
+  position: absolute;
+  top: 450px;
+  left: 15px;
+}
+
+.canvas {
+  z-index: 5;
+  position: absolute;
+  left: 400px;
+}
+
+.infoBox {
+  width: 370px;
+  height: 384px;
+  background-color: #8b858533;
+  margin-top: 6px;
+  position: absolute;
+}
+
+.infoBoxR {
+  width: 370px;
+  height: 390px;
+  position: absolute;
+  right: 0;
+}
+
+.timer {
+  font-size: 40px;
+  position: absolute;
+  top: 470px;
+  right: 3px;
+}
+
+/*# sourceMappingURL=index.ff901e0b.css.map */
