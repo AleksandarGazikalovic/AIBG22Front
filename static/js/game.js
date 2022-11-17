@@ -40,7 +40,7 @@ const TileEntity = { // uzima delovi 1, drugi red kako to zna pitate se? ctrl f 
   Fence200: { index: 1 },
   Fence100: { index: 2 },
   WORMHOLE: { index: 3 },
-  BLACKHOLE: { index: 4 }
+  BLACKHOLE:{ index: 4 }
 };
 
 
@@ -117,6 +117,7 @@ class Draw{
     }
     // Ako ima entity poziva ovo:
 	drawEntity(x, y, indexOfEntityType){
+		
 		this.ctx.drawImage(
         	FullTileEntities,
         	sTileW * indexOfEntityType,
@@ -130,10 +131,11 @@ class Draw{
     	);
   	}
 
-	drawPlayer(x, y, playerId){
+	drawPlayer(r, q, index){
+		var [x,y] = convertCoordinates(r, q);
 		this.ctx.drawImage(
 			players,
-			sPlayerW*playerId,
+			sPlayerW*index,
 			0,
 			sPlayerW,
 			sPlayerW,
@@ -147,87 +149,25 @@ class Draw{
 
 
 class Character {
-	constructor(ctx, info) { // info tu je sve. index suvisan. 
-	 	this.ctx = ctx;
-        this._id = info.id; // 
-        this.q = info.q; // pozicija
-        this.r = info.r; // pozicija
-        this.index = info._id - 1; // zbog indeksiranja sa slikom u realnosti islo 1 pa sad od 0
-
-        this.HP = info.health;
-        this.kills = info.kills;
-        this.power = info.power;
-        this.teamName = info.name ? info.name : info._id;	
-	 	this.update(info);
+	constructor(ctx, Player) { // info tu je sve. index suvisan. 
 	 	
-		this.paralysed = false;
-	 	
-	 	this.steps = 5000;
-	 	this.left = 4;
+		this.ctx = ctx;
+
+		this.id = Player.info.playerIdx;           // 
+		this.index = Player.id - 1; 
+        this.q = Player.info.q;             // pozicija
+        this.r = Player.info.r;             // pozicija
+        
+		this.level  = Player.info.level;
+		this.health = Player.info.health;
+		this.power  = Player.info.power;
+        this.deaths = Player.info.deaths;
+		this.kills  = Player.info.kills;
+        
+        this.trapped = Player.info.trapped;
+        //this.teamName = Player.name ? Player.name : Player._id;				 	
 	}
 	
-	//crtanje igraca - TODO ubacivanje directiona
-	draw(){
-		
-		let index = this.index;
-        if(this.HP <= 0){
-        	index = 5; // kad umre index za iscrtavanje 
-        }
-		if(index == 17 || index == 16) index = 4;
-
-
-       
-        this.ctx.drawImage(
-            players, 
-            sTileW*index,// sece po x
-            0,
-            sPlayerW,
-            sPlayerH,
-            convertCoordinates(this.q, this.r)[0],    
-            convertCoordinates(this.r, this.q)[1],
-            dTileW,
-            dTileH
-        );
-        
-        
-        
-	}
-	
-	//ne kapiram zasto ne moze samo direktno draw?
-	refresh(){
-		this.draw();
-	}
-	
-	update(info) {
-		/*
-		
-		this.health = info.health;
-		*/
-		// this.steps = info.steps;
-		// this.q = info.q;
-		// this.r = info.r;
-		// if(info.direction == 1){
-		// 	this.direction = 0;
-		// }
-		// if(info.direction == 0){
-		// 	this.direction = 1;
-		// }
-		
-		
-        // this.HP = info.health;
-        // this.coins = info.money;
-        // this.cannons = info.cannons;
-		// this.paralysed = info.paralysed;
-		
-		
-
-		
-		//TODO 
-		//polja vervoatno sluze za infobox
-		//this.info = info;
-		//this.lastAction = info.lastAction;
-		//this.setInfoBox();
-	}
 	
 	// setInfoBox() {
 	// 	if(this._id == 17 || this._id == 18) return;
@@ -255,141 +195,68 @@ class Character {
 
 export class Game {
 	constructor(gameId) {
-        this.ctx = document.getElementById("game").getContext("2d"); // 2d kkanvas? just js things
+        this.ctx = document.getElementById("game").getContext("2d"); 
         this.gameId = gameId;
-        this.drawInstance = null; // na initu se inicij sve sto je ovde null 
+        this.drawInstance = null; 
         this.map = null;
-        this.firstRender = true;
         this.players = [];
         this.shouldDraw = true;
-       
-		this.prevRes = null;
-		
-	}
+		this.firstRender = true;
+    }
 	
 	//inicijalizacija igrice - poziva se iz index.js
 	init(){
-		//kaci Draw na Game
-		this.drawInstance = new Draw({
-          ctx: this.ctx,
-          FullTileEntities
-        });
+		// Povezivanje Draw i Game
+		this.drawInstance = new Draw({ctx: this.ctx,FullTileEntities});
 
-		jQuery(() => {
-			//dozvoljava komunikaciju sa servervom bez reloadovanja stranice
+		jQuery(() => {			
 			$.ajax({
 				url: `http://${API_ROOT}/game?gameId=${this.gameId}&password=salamala`,
 				dataType: "json",
 				success: result => {					
-					this.drawInstance = new Draw({
-					ctx: this.ctx,
-					FullTileEntities
-				});
-				var result1 = JSON.parse(result.gameState);
+					this.drawInstance = new Draw({ ctx: this.ctx,FullTileEntities}); // Isto kao i prva linija inita-a. Sa svakim zahtevom mi povezujemo game i Draw() klasu. 
+					var game = JSON.parse(result.gameState); 
+					this.update(game); 
+					requestAnimationFrame(this.draw.bind(this)); // bind vraca funkciju draw klase game, a prosledjuje joj Game
 				
-				this.update(result1); //result je json od servera
-				
-				
-				
-				if (result1.winner !== null) {
-					this.showWinner(result1.winner);
-				}
-				
-				requestAnimationFrame(this.draw.bind(this)); // bind vraca funkciju draw klase game, a prosledjuje joj Game
-				},
-				error: error => {
-				
-				}
+				},error: error => {}
 			});
 		});
-	}	
+	}		
 	
-	//postavlja sledeceg igraca, ne znam sto se zove isAcitve
-	isActive(player, game) {
-        return this.HP>0;
-    }
-	
-	//update-uje klasu
-	//TODO NPC-evi i promenljiv broj igraca
+
     update(game) {
 		
+		//Ako imamo pobednika, samo to pokazi i tu stani. 
         if (game.winner !== null) {
             this.shouldDraw = false;
 			this.showWinner(game.winner);
         }
-		
-		//timer.text(game.turn);
 
+		//Kupimo mapu:
 		this.map = game.map.tiles;
-		this.players[0] = game.player1;
-		this.players[1] = game.player2;
-		this.players[2] = game.player3;
-		this.players[3] = game.player4;
-		console.log(this.players[0]);
+
 		
-        const Player1Info = {
-			_id: 1,
-			active: this.isActive(game.player1, game),//ovo uvek vraca true, ne znam cemu sluzi
-			...game.player1
-        };
-        const info2 = {
-			_id: 2,
-			
-			active: this.isActive(game.player2, game),
-			...game.player2
-        };
-        const info3 = {
-			_id: 3,
-			
-			active: this.isActive(game.player3, game),
-			...game.player3
-        };
-        const info4 = {
-			_id: 4,
-			
-			active: this.isActive(game.player4, game),
-			...game.player4
-        };
-		
-		
-		if (this.players.length) { 		
-			/*
-			this.players[0].update(Player1Info);
-			this.players[1].update(info2);
-			this.players[2].update(info3);
-			this.players[3].update(info4);
-			*/
-			
-        } else {
-			// this.players = [
-			// 	new Character(this.ctx, Player1Info),
-			// 	new Character(this.ctx, info2),
-			// 	new Character(this.ctx, info3),
-			// 	new Character(this.ctx, info4),
-			// 	new Character(this.ctx, info5),
-			// 	new Character(this.ctx, info6)
-			// ];
-        }
-		/*
-		i=0
-		for(element of players){
-			if(elemet.health <= 0){
-				element.refresh();
-				players.splice(i,1);
-			}
-			i++;
-		}
-		*/
-		//this.players.forEach(p => p.refresh())
+		// Ubacujemo igrace: 
+        const Player1 = { id: 1, info: game.player1 };
+		const Player2 = { id: 2, info: game.player2 };
+        const Player3 = { id: 3, info: game.player3 };
+        const Player4 = { id: 4, info: game.player4 };
+		this.players = [
+			new Character(this.ctx, Player1),
+			new Character(this.ctx, Player2),
+			new Character(this.ctx, Player3),
+			new Character(this.ctx, Player4)
+		];
 	}
 	
 	draw(){
 		if (this.ctx === null) {
 			return;
         }
-		
+		// Crtanje MapBase-a:
 		this.drawInstance.drawMapBase();
-		
+		// Crtanje tile-ova:
         let cap = 15; 
         let sgn = 1; 
         for (let y = 0; y <= numOfRows; y++) {
@@ -401,28 +268,21 @@ export class Game {
             cap = cap + sgn;
 			if(sgn*cap == -14) break;
         }
-		this.drawInstance.drawPlayer(convertCoordinates(this.players[0].r, this.players[0].q)[0],convertCoordinates(this.players[0].r, this.players[0].q)[1],0)
-		this.drawInstance.drawPlayer(convertCoordinates(this.players[1].r, this.players[1].q)[0],convertCoordinates(this.players[1].r, this.players[1].q)[1],1);
-		this.drawInstance.drawPlayer(convertCoordinates(this.players[2].r, this.players[2].q)[0],convertCoordinates(this.players[2].r, this.players[1].q)[1],2);
-		this.drawInstance.drawPlayer(convertCoordinates(this.players[3].r, this.players[3].q)[0],convertCoordinates(this.players[3].r, this.players[1].q)[1],3);
-
-
-		//this.players.forEach(p => p.refresh());
-		
+		// Crtanje player-a:
+		for(let i=0;i< 4;i++){
+			this.drawInstance.drawPlayer(this.players[i].r,this.players[i].q, i );
+		}
+		this.drawInstance.drawBoss();	
 
 		if (this.shouldDraw || this.firstRender)  
 			requestAnimationFrame(this.draw.bind(this));
         
 		this.firstRender = false;
-		this.drawInstance.drawBoss();
-		
-		
-		
 	}
 	
 	//winner pop-up
 	async showWinner(winner) {
-		console.log("uslo je u funkc");
+		//console.log("uslo je u funkc");
         //const sleep = ms => new Promise(res => setTimeout(res, ms));
         //await sleep(2000);
         this.shouldDraw = false;

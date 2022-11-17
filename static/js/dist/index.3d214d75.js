@@ -2285,81 +2285,45 @@ class Draw {
     drawEntity(x, y, indexOfEntityType) {
         this.ctx.drawImage(FullTileEntities, sTileW * indexOfEntityType, 0, sTileW, sTileH, x - 1, y + 1, dTileW, dTileH);
     }
-    drawPlayer(x, y, playerId) {
-        this.ctx.drawImage(players, sPlayerW * playerId, 0, sPlayerW, sPlayerW, x + 2, y + 1, 44, 44);
+    drawPlayer(r, q, index) {
+        var [x, y] = convertCoordinates(r, q);
+        this.ctx.drawImage(players, sPlayerW * index, 0, sPlayerW, sPlayerW, x + 2, y + 1, 44, 44);
     }
 }
 class Character {
-    constructor(ctx, info){
+    constructor(ctx, Player){
         this.ctx = ctx;
-        this._id = info.id; // 
-        this.q = info.q; // pozicija
-        this.r = info.r; // pozicija
-        this.index = info._id - 1; // zbog indeksiranja sa slikom u realnosti islo 1 pa sad od 0
-        this.HP = info.health;
-        this.kills = info.kills;
-        this.power = info.power;
-        this.teamName = info.name ? info.name : info._id;
-        this.update(info);
-        this.paralysed = false;
-        this.steps = 5000;
-        this.left = 4;
-    }
-    //crtanje igraca - TODO ubacivanje directiona
-    draw() {
-        let index = this.index;
-        if (this.HP <= 0) index = 5; // kad umre index za iscrtavanje 
-        if (index == 17 || index == 16) index = 4;
-        this.ctx.drawImage(players, sTileW * index, 0, sPlayerW, sPlayerH, convertCoordinates(this.q, this.r)[0], convertCoordinates(this.r, this.q)[1], dTileW, dTileH);
-    }
-    //ne kapiram zasto ne moze samo direktno draw?
-    refresh() {
-        this.draw();
-    }
-    update(info) {
-    /*
-		
-		this.health = info.health;
-		*/ // this.steps = info.steps;
-    // this.q = info.q;
-    // this.r = info.r;
-    // if(info.direction == 1){
-    // 	this.direction = 0;
-    // }
-    // if(info.direction == 0){
-    // 	this.direction = 1;
-    // }
-    // this.HP = info.health;
-    // this.coins = info.money;
-    // this.cannons = info.cannons;
-    // this.paralysed = info.paralysed;
-    //TODO 
-    //polja vervoatno sluze za infobox
-    //this.info = info;
-    //this.lastAction = info.lastAction;
-    //this.setInfoBox();
+        this.id = Player.info.playerIdx; // 
+        this.index = Player.id - 1;
+        this.q = Player.info.q; // pozicija
+        this.r = Player.info.r; // pozicija
+        this.level = Player.info.level;
+        this.health = Player.info.health;
+        this.power = Player.info.power;
+        this.deaths = Player.info.deaths;
+        this.kills = Player.info.kills;
+        this.trapped = Player.info.trapped;
+    //this.teamName = Player.name ? Player.name : Player._id;				 	
     }
 }
 class Game {
     constructor(gameId){
-        this.ctx = document.getElementById("game").getContext("2d"); // 2d kkanvas? just js things
+        this.ctx = document.getElementById("game").getContext("2d");
         this.gameId = gameId;
-        this.drawInstance = null; // na initu se inicij sve sto je ovde null 
+        this.drawInstance = null;
         this.map = null;
-        this.firstRender = true;
         this.players = [];
         this.shouldDraw = true;
-        this.prevRes = null;
+        this.firstRender = true;
     }
     //inicijalizacija igrice - poziva se iz index.js
     init() {
-        //kaci Draw na Game
+        // Povezivanje Draw i Game
         this.drawInstance = new Draw({
             ctx: this.ctx,
             FullTileEntities
         });
         jQuery(()=>{
-            //dozvoljava komunikaciju sa servervom bez reloadovanja stranice
             $.ajax({
                 url: `http://${(0, _configuration.API_ROOT)}/game?gameId=${this.gameId}&password=salamala`,
                 dataType: "json",
@@ -2367,69 +2331,52 @@ class Game {
                     this.drawInstance = new Draw({
                         ctx: this.ctx,
                         FullTileEntities
-                    });
-                    var result1 = JSON.parse(result.gameState);
-                    this.update(result1); //result je json od servera
-                    if (result1.winner !== null) this.showWinner(result1.winner);
+                    }); // Isto kao i prva linija inita-a. Sa svakim zahtevom mi povezujemo game i Draw() klasu. 
+                    var game = JSON.parse(result.gameState);
+                    this.update(game);
                     requestAnimationFrame(this.draw.bind(this)); // bind vraca funkciju draw klase game, a prosledjuje joj Game
                 },
                 error: (error)=>{}
             });
         });
     }
-    //postavlja sledeceg igraca, ne znam sto se zove isAcitve
-    isActive(player, game) {
-        return this.HP > 0;
-    }
-    //update-uje klasu
-    //TODO NPC-evi i promenljiv broj igraca
     update(game) {
+        //Ako imamo pobednika, samo to pokazi i tu stani. 
         if (game.winner !== null) {
             this.shouldDraw = false;
             this.showWinner(game.winner);
         }
-        //timer.text(game.turn);
+        //Kupimo mapu:
         this.map = game.map.tiles;
-        this.players[0] = game.player1;
-        this.players[1] = game.player2;
-        this.players[2] = game.player3;
-        this.players[3] = game.player4;
-        console.log(this.players[0]);
-        const Player1Info = {
-            _id: 1,
-            active: this.isActive(game.player1, game),
-            ...game.player1
+        // Ubacujemo igrace: 
+        const Player1 = {
+            id: 1,
+            info: game.player1
         };
-        const info2 = {
-            _id: 2,
-            active: this.isActive(game.player2, game),
-            ...game.player2
+        const Player2 = {
+            id: 2,
+            info: game.player2
         };
-        const info3 = {
-            _id: 3,
-            active: this.isActive(game.player3, game),
-            ...game.player3
+        const Player3 = {
+            id: 3,
+            info: game.player3
         };
-        const info4 = {
-            _id: 4,
-            active: this.isActive(game.player4, game),
-            ...game.player4
+        const Player4 = {
+            id: 4,
+            info: game.player4
         };
-        this.players.length;
-    /*
-		i=0
-		for(element of players){
-			if(elemet.health <= 0){
-				element.refresh();
-				players.splice(i,1);
-			}
-			i++;
-		}
-		*/ //this.players.forEach(p => p.refresh())
+        this.players = [
+            new Character(this.ctx, Player1),
+            new Character(this.ctx, Player2),
+            new Character(this.ctx, Player3),
+            new Character(this.ctx, Player4)
+        ];
     }
     draw() {
         if (this.ctx === null) return;
+        // Crtanje MapBase-a:
         this.drawInstance.drawMapBase();
+        // Crtanje tile-ova:
         let cap = 15;
         let sgn = 1;
         for(let y = 0; y <= numOfRows; y++){
@@ -2438,18 +2385,15 @@ class Game {
             cap = cap + sgn;
             if (sgn * cap == -14) break;
         }
-        this.drawInstance.drawPlayer(convertCoordinates(this.players[0].r, this.players[0].q)[0], convertCoordinates(this.players[0].r, this.players[0].q)[1], 0);
-        this.drawInstance.drawPlayer(convertCoordinates(this.players[1].r, this.players[1].q)[0], convertCoordinates(this.players[1].r, this.players[1].q)[1], 1);
-        this.drawInstance.drawPlayer(convertCoordinates(this.players[2].r, this.players[2].q)[0], convertCoordinates(this.players[2].r, this.players[1].q)[1], 2);
-        this.drawInstance.drawPlayer(convertCoordinates(this.players[3].r, this.players[3].q)[0], convertCoordinates(this.players[3].r, this.players[1].q)[1], 3);
-        //this.players.forEach(p => p.refresh());
+        // Crtanje player-a:
+        for(let i = 0; i < 4; i++)this.drawInstance.drawPlayer(this.players[i].r, this.players[i].q, i);
+        this.drawInstance.drawBoss();
         if (this.shouldDraw || this.firstRender) requestAnimationFrame(this.draw.bind(this));
         this.firstRender = false;
-        this.drawInstance.drawBoss();
     }
     //winner pop-up
     async showWinner(winner) {
-        console.log("uslo je u funkc");
+        //console.log("uslo je u funkc");
         //const sleep = ms => new Promise(res => setTimeout(res, ms));
         //await sleep(2000);
         this.shouldDraw = false;
@@ -2474,8 +2418,8 @@ function convertCoordinates(r, q) {
     ];
 }
 
-},{"../gif/Players.png":"5Mukr","../gif/MapBase.png":"8W9rP","../gif/TileBorder.png":"kY4Bd","../gif/Tiles.png":"fZCws","../gif/Boss.png":"4euS3","./configuration":"8dYAi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Mukr":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "Players.738e8ad4.png" + "?" + Date.now();
+},{"../gif/Players.png":"bZMn1","../gif/MapBase.png":"6Uxz9","../gif/TileBorder.png":"3OCf6","../gif/Tiles.png":"3UTAw","../gif/Boss.png":"gA5tk","./configuration":"8dYAi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bZMn1":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "Players.b89c93e5.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
@@ -2511,17 +2455,17 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"8W9rP":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "MapBase.b0c6f0e6.png" + "?" + Date.now();
+},{}],"6Uxz9":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "MapBase.fd5b2fce.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}],"kY4Bd":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "TileBorder.adae23a4.png" + "?" + Date.now();
+},{"./helpers/bundle-url":"lgJ39"}],"3OCf6":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "TileBorder.2401f5a8.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}],"fZCws":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "Tiles.f43e2baf.png" + "?" + Date.now();
+},{"./helpers/bundle-url":"lgJ39"}],"3UTAw":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "Tiles.3b4f817e.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}],"4euS3":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "Boss.d7b91e20.png" + "?" + Date.now();
+},{"./helpers/bundle-url":"lgJ39"}],"gA5tk":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("UckoE") + "Boss.a0687232.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"8dYAi":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
