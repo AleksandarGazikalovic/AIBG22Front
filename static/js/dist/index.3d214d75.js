@@ -2303,10 +2303,21 @@ class Character {
         this.deaths = Player.info.deaths;
         this.kills = Player.info.kills;
         this.trapped = Player.info.trapped;
-    //this.teamName = Player.name ? Player.name : Player._id;				 	
+        //this.teamName = Player.name ? Player.name : Player._id;	
+        this.setInfoBox();
+    }
+    setInfoBox() {
+        const div = document.querySelector(`.player${this.index + 1}`);
+        console.log(div);
+        div.querySelector(".level").innerHTML = `${this.level}`;
+        div.querySelector(".health").innerHTML = `${this.health}`;
+        div.querySelector(".power").innerHTML = `${this.power}`;
+        div.querySelector(".deaths").innerHTML = `${this.deaths}`;
+        div.querySelector(".kills").innerHTML = `${this.kills}`;
     }
 }
 class Game {
+    //Klasika konstruktor:
     constructor(gameId){
         this.ctx = document.getElementById("game").getContext("2d");
         this.gameId = gameId;
@@ -2340,6 +2351,7 @@ class Game {
             });
         });
     }
+    // Kupljenje podataka iz GameState-a:
     update(game) {
         //Ako imamo pobednika, samo to pokazi i tu stani. 
         if (game.winner !== null) {
@@ -2372,6 +2384,7 @@ class Game {
             new Character(this.ctx, Player4)
         ];
     }
+    // Iscrtavanje svih elemenata:
     draw() {
         if (this.ctx === null) return;
         // Crtanje MapBase-a:

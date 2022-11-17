@@ -165,35 +165,25 @@ class Character {
 		this.kills  = Player.info.kills;
         
         this.trapped = Player.info.trapped;
-        //this.teamName = Player.name ? Player.name : Player._id;				 	
+        //this.teamName = Player.name ? Player.name : Player._id;	
+		this.setInfoBox();			 	
 	}
 	
 	
-	// setInfoBox() {
-	// 	if(this._id == 17 || this._id == 18) return;
-	// 	//console.log(`.content${this.index}`);
-	// 	const div = document.querySelector(`.content${this.index+1}`);
-	// 	//console.log( div );
-	// 	  
-	// 	  div.querySelector(".coins").innerHTML = `${this.coins}`;
-	// 	  div.querySelector(".health").innerHTML = `${this.HP}`;
-	// 	  div.querySelector(".cannons").innerHTML = `${this.cannons}`;
-    //       return;
-    //     }
+	setInfoBox() {
+		const div = document.querySelector(`.player${this.index+1}`);
+		console.log(div);
+		div.querySelector(".level").innerHTML = `${this.level}`;
+		div.querySelector(".health").innerHTML = `${this.health}`;
+		div.querySelector(".power").innerHTML = `${this.power}`;
+		div.querySelector(".deaths").innerHTML = `${this.deaths}`;
+		div.querySelector(".kills").innerHTML = `${this.kills}`;
     
-        
-    //     div.querySelector("h3").innerHTML = `${this.teamName}`;     //ovo nama treba da radi!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //     div.querySelector(".coins").innerHTML = `${this.coins}`;
-    //     div.querySelector(".health").innerHTML = `${this.HP}`;
-    //     div.querySelector(".cannons").innerHTML = `${this.cannons}`;
-	// 	
-    
-    //     //this.partsDiv.innerHTML = '';
-    
-    // }
+     }
 }
 
 export class Game {
+	//Klasika konstruktor:
 	constructor(gameId) {
         this.ctx = document.getElementById("game").getContext("2d"); 
         this.gameId = gameId;
@@ -224,7 +214,7 @@ export class Game {
 		});
 	}		
 	
-
+	// Kupljenje podataka iz GameState-a:
     update(game) {
 		
 		//Ako imamo pobednika, samo to pokazi i tu stani. 
@@ -249,7 +239,7 @@ export class Game {
 			new Character(this.ctx, Player4)
 		];
 	}
-	
+	// Iscrtavanje svih elemenata:
 	draw(){
 		if (this.ctx === null) {
 			return;
