@@ -2244,23 +2244,21 @@ class Draw {
         this.ctx = ctx;
         this.FullTileEntities = FullTileEntities;
     }
-    rotate(x, y, angle) {
-        this.To_Radians = Math.PI / 180;
-        this.image = new Image();
-        this.src = (0, _mapBasePngDefault.default);
+    drawRotatedPlayer(r, q, index, angle) {
+        var [x, y] = convertCoordinates(r, q);
         this.ctx.save();
-        this.ctx.translate(x, y);
-        this.ctx.rotate(angle * this.To_Radians);
-        this.ctx.drawImage(this.image, -(this.image.width / 2), -this.image.height / 2);
+        this.ctx.translate(x + 22, y + 22);
+        this.ctx.rotate(angle * Math.PI / 180);
+        this.ctx.drawImage(players, sPlayerW * index, 0, sPlayerW, sPlayerW, -22, -22, 44, 44);
         this.ctx.restore();
     }
     // Iscrtavanje podloge mape:
     drawMapBase() {
-        this.ctx.drawImage(mapBase, -5, -5);
+        this.ctx.drawImage(mapBase, -1, -3);
     }
     // Iscrtavanje Boss-a:
     drawBoss() {
-        this.ctx.drawImage(boss, 496.5, 435.5);
+        this.ctx.drawImage(boss, 492, 429);
     }
     // Opsta funkcija:
     drawTile(tile) {
@@ -2314,6 +2312,8 @@ class Character {
         div.querySelector(".power").innerHTML = `${this.power}`;
         div.querySelector(".deaths").innerHTML = `${this.deaths}`;
         div.querySelector(".kills").innerHTML = `${this.kills}`;
+        let angle = find_angle(10, 10, 20, 10);
+        console.log(angle);
     }
 }
 class Game {
@@ -2399,7 +2399,8 @@ class Game {
             if (sgn * cap == -14) break;
         }
         // Crtanje player-a:
-        for(let i = 0; i < 4; i++)this.drawInstance.drawPlayer(this.players[i].r, this.players[i].q, i);
+        for(let i = 0; i < 4; i++)//this.drawInstance.drawPlayer(this.players[i].r,this.players[i].q, i );
+        this.drawInstance.drawRotatedPlayer(this.players[i].r, this.players[i].q, i, find_angle(this.players[i].r, this.players[i].q, this.players[i].r - 20, this.players[i].q));
         this.drawInstance.drawBoss();
         if (this.shouldDraw || this.firstRender) requestAnimationFrame(this.draw.bind(this));
         this.firstRender = false;
@@ -2429,6 +2430,16 @@ function convertCoordinates(r, q) {
         x,
         y
     ];
+}
+function find_angle(prevR, prevQ, currR, currQ) {
+    let [Bx, By] = convertCoordinates(prevR, prevQ);
+    let [Cx, Cy] = convertCoordinates(currR, currQ);
+    var Ax = Bx;
+    var Ay = By - 10;
+    var AB = Math.sqrt(Math.pow(Bx - Ax, 2) + Math.pow(By - Ay, 2));
+    var BC = Math.sqrt(Math.pow(Bx - Cx, 2) + Math.pow(By - Cy, 2));
+    var AC = Math.sqrt(Math.pow(Cx - Ax, 2) + Math.pow(Cy - Ay, 2));
+    return Math.acos((BC * BC + AB * AB - AC * AC) / (2 * BC * AB)) * 180 / Math.PI;
 }
 
 },{"../gif/Players.png":"bZMn1","../gif/MapBase.png":"6Uxz9","../gif/TileBorder.png":"3OCf6","../gif/Tiles.png":"3UTAw","../gif/Boss.png":"gA5tk","./configuration":"8dYAi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bZMn1":[function(require,module,exports) {

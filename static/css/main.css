@@ -1,15 +1,13 @@
-*{
-    margin: 0px;
-    padding: 0px;
-}
-
-
 @font-face {
 
     font-family: 'neuropolX';
     src: url("../gif/NeuropolXBold.ttf");
     font-weight: bold;
     font-style: normal;
+}
+*{
+    margin: 0px;
+    padding: 0px;
 }
 
 body, html {
@@ -72,7 +70,7 @@ main{
     width: 370px;
     height: 384px;
     margin-top: 6px;
-    background-color: rgb(139, 133, 133, 20%);
+    
 }
 .infoBoxR{
     

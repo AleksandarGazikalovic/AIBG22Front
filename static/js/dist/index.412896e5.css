@@ -1,13 +1,13 @@
-* {
-  margin: 0;
-  padding: 0;
-}
-
 @font-face {
   font-family: neuropolX;
   src: url("NeuropolXBold.5c8ff09d.ttf");
   font-weight: bold;
   font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
 body, html {
@@ -74,7 +74,6 @@ main {
 .infoBox {
   width: 370px;
   height: 384px;
-  background-color: #8b858533;
   margin-top: 6px;
   position: absolute;
 }

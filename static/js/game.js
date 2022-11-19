@@ -45,42 +45,45 @@ const TileEntity = { // uzima delovi 1, drugi red kako to zna pitate se? ctrl f 
 
 
 class Draw{
-	
+
 	constructor({ctx, FullTileEntities}){
 		this.ctx = ctx; 
 		this.FullTileEntities = FullTileEntities; 
 	}
 
-	rotate(x, y, angle){
-
-		this.To_Radians = Math.PI/180;
-		this.image = new Image();
-		this.src = MapBaseURL;
-	
-		
-			this.ctx.save();
-			this.ctx.translate(x, y);
-			this.ctx.rotate(angle* this.To_Radians);
-	
-			this.ctx.drawImage(this.image, -(this.image.width/2), -(this.image.height)/2);
-			this.ctx.restore();
-		
+	drawRotatedPlayer(r, q, index, angle){
+		var [x,y] = convertCoordinates(r, q);		
+		this.ctx.save();
+		this.ctx.translate(x+22,y+22);
+		this.ctx.rotate(angle*Math.PI/180);
+		this.ctx.drawImage(
+			players,		// what image
+			sPlayerW*index, //source image start crop
+			0,				// source image start crop
+			sPlayerW,		//source image width crop
+			sPlayerW,       // source image 
+			-22,
+			-22,
+			44,
+			44
+		)
+		this.ctx.restore();
 	}
 	
 	// Iscrtavanje podloge mape:
 	drawMapBase(){
 		this.ctx.drawImage(
 			mapBase,
-			-5,
-			-5
+			-1,
+			-3
 		)
 	};
 	// Iscrtavanje Boss-a:
 	drawBoss(){
 		this.ctx.drawImage(
 			boss,
-			496.5,
-			435.5
+			492,
+			429
 		)
 	}
 	
@@ -163,12 +166,10 @@ class Character {
 		this.power  = Player.info.power;
         this.deaths = Player.info.deaths;
 		this.kills  = Player.info.kills;
-        
         this.trapped = Player.info.trapped;
         //this.teamName = Player.name ? Player.name : Player._id;	
 		this.setInfoBox();			 	
 	}
-	
 	
 	setInfoBox() {
 		const div = document.querySelector(`.player${this.index+1}`);
@@ -179,6 +180,8 @@ class Character {
 		div.querySelector(".deaths").innerHTML = `${this.deaths}`;
 		div.querySelector(".kills").innerHTML = `${this.kills}`;
     
+		let angle = find_angle(10, 10, 20, 10);
+		console.log(angle);
      }
 }
 
@@ -260,7 +263,8 @@ export class Game {
         }
 		// Crtanje player-a:
 		for(let i=0;i< 4;i++){
-			this.drawInstance.drawPlayer(this.players[i].r,this.players[i].q, i );
+			//this.drawInstance.drawPlayer(this.players[i].r,this.players[i].q, i );
+			this.drawInstance.drawRotatedPlayer(this.players[i].r, this.players[i].q, i, find_angle(this.players[i].r, this.players[i].q, this.players[i].r-20, this.players[i].q));
 		}
 		this.drawInstance.drawBoss();	
 
@@ -299,4 +303,15 @@ function convertCoordinates(r, q){
 	return [x,y];
 }
 
+function find_angle(prevR, prevQ,currR, currQ){
+	
+	let [Bx, By] = convertCoordinates(prevR, prevQ);
+	let [Cx, Cy] = convertCoordinates(currR, currQ);
 
+	var Ax =Bx;
+	var Ay = By-10;
+	var AB = Math.sqrt(Math.pow(Bx-Ax, 2) + Math.pow(By -Ay,2));
+	var BC = Math.sqrt(Math.pow(Bx-Cx, 2) + Math.pow(By -Cy,2));
+	var AC = Math.sqrt(Math.pow(Cx-Ax, 2) + Math.pow(Cy -Ay,2));
+	return Math.acos((BC*BC+AB*AB-AC*AC)/(2*BC*AB))*180/Math.PI;
+}
