@@ -2221,6 +2221,7 @@ const sTileW = 44; // Skraceno od  - Source Tile Width - Sirinu koju uzima od iz
 const sTileH = 44; // Skraceno od  - Source Tile Height - Visinu koju uzima od izvorne slike
 const sPlayerW = 44;
 const sPlayerH = 44;
+var angle = 0;
 // Tipovi entitija: =====================================================================================
 const TileEntity = {
     Fence300: {
@@ -2268,8 +2269,8 @@ class Draw {
         if (!(entity.type === "EMPTY" || entity.type === "BOSS")) {
             if (entity.type === "FENCE") {
                 if (entity.health > 200) entityType = TileEntity["Fence300"];
-                if (entity.health >= 100 && entity.health < 200) entityType = TileEntity["Fence200"];
-                if (entity.health < 100) entityType = TileEntity["Fence100"];
+                if (entity.health > 100 && entity.health <= 200) entityType = TileEntity["Fence200"];
+                if (entity.health <= 100) entityType = TileEntity["Fence100"];
             } else entityType = TileEntity[entity.type];
             this.drawEntity(x, y, entityType.index);
         }
@@ -2281,7 +2282,12 @@ class Draw {
     }
     // Ako ima entity poziva ovo:
     drawEntity(x, y, indexOfEntityType) {
-        this.ctx.drawImage(FullTileEntities, sTileW * indexOfEntityType, 0, sTileW, sTileH, x - 1, y + 1, dTileW, dTileH);
+        angle += 0.01;
+        this.ctx.save();
+        this.ctx.translate(x + 22, y + 22);
+        this.ctx.rotate(angle * Math.PI / 180);
+        this.ctx.drawImage(FullTileEntities, sTileW * indexOfEntityType, 0, sTileW, sTileH, -22, -22, dTileW, dTileH);
+        this.ctx.restore();
     }
     drawPlayer(r, q, index) {
         var [x, y] = convertCoordinates(r, q);

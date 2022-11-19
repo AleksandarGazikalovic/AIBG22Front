@@ -32,6 +32,7 @@ const sTileH =  44; // Skraceno od  - Source Tile Height - Visinu koju uzima od 
 const sPlayerW =  44; 
 const sPlayerH = 44;
 
+var angle = 0;
 
 
 // Tipovi entitija: =====================================================================================
@@ -98,10 +99,10 @@ class Draw{
                 if(entity.health > 200){
 					entityType = TileEntity['Fence300'];
                 }
-                if(entity.health >= 100 && entity.health < 200){
+                if(entity.health >100 && entity.health <= 200){
                     entityType = TileEntity['Fence200'];
                 }
-                if(entity.health < 100 ){
+                if(entity.health <= 100 ){
                     entityType = TileEntity['Fence100'];
                 }
             } else entityType = TileEntity[entity.type];
@@ -120,18 +121,22 @@ class Draw{
     }
     // Ako ima entity poziva ovo:
 	drawEntity(x, y, indexOfEntityType){
-		
+		angle +=0.01;
+		this.ctx.save();
+		this.ctx.translate(x+22,y+22);
+		this.ctx.rotate(angle*Math.PI/180);
 		this.ctx.drawImage(
         	FullTileEntities,
         	sTileW * indexOfEntityType,
 			0, 
 			sTileW, 
 			sTileH,
-        	x-1, 
-        	y+1, 
+        	-22, 
+        	-22, 
         	dTileW, 
         	dTileH
     	);
+		this.ctx.restore();
   	}
 
 	drawPlayer(r, q, index){
