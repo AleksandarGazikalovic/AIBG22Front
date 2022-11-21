@@ -2222,6 +2222,7 @@ const sTileH = 44; // Skraceno od  - Source Tile Height - Visinu koju uzima od i
 const sPlayerW = 44;
 const sPlayerH = 44;
 var angle = 0;
+var MapBaseAngle = 0;
 // Tipovi entitija: =====================================================================================
 const TileEntity = {
     Fence300: {
@@ -2289,37 +2290,51 @@ class Draw {
         this.ctx.drawImage(FullTileEntities, sTileW * indexOfEntityType, 0, sTileW, sTileH, -22, -22, dTileW, dTileH);
         this.ctx.restore();
     }
-    drawPlayer(r, q, index) {
-        var [x, y] = convertCoordinates(r, q);
-        this.ctx.drawImage(players, sPlayerW * index, 0, sPlayerW, sPlayerW, x + 2, y + 1, 44, 44);
-    }
 }
 class Character {
     constructor(ctx, Player){
         this.ctx = ctx;
-        this.id = Player.info.playerIdx; // 
-        this.index = Player.id - 1;
-        this.q = Player.info.q; // pozicija
-        this.r = Player.info.r; // pozicija
-        this.level = Player.info.level;
-        this.health = Player.info.health;
-        this.power = Player.info.power;
-        this.deaths = Player.info.deaths;
-        this.kills = Player.info.kills;
-        this.trapped = Player.info.trapped;
-        //this.teamName = Player.name ? Player.name : Player._id;	
+        this.id = Player.playerIdx; // 
+        this.index = this.id - 1;
+        this.q = Player.q; // pozicija
+        this.r = Player.r;
+        [this.x, this.y] = convertCoordinates(this.r, this.q); // pozicija
+        this.prevQ = this.q;
+        this.prevR = this.r;
+        this.level = Player.level;
+        this.health = Player.health;
+        this.power = Player.power;
+        this.deaths = Player.deaths;
+        this.kills = Player.kills;
+        this.trapped = Player.trapped;
+        this.angle = 0;
+        this.setInfoBox();
+    }
+    updatePlayer(Player) {
+        this.prevQ = this.q;
+        this.prevR = this.r;
+        console.log(this.prevQ, this.prevR);
+        this.id = Player.playerIdx; // 
+        this.index = this.id - 1;
+        this.q = Player.q; // pozicija
+        this.r = Player.r; // pozicija
+        this.level = Player.level;
+        this.health = Player.health;
+        this.power = Player.power;
+        this.deaths = Player.deaths;
+        this.kills = Player.kills;
+        this.trapped = Player.trapped;
+        this.angle = find_angle(this.r, this.q, this.prevR, this.players[i].prevQ);
+        console.log(this.angle);
         this.setInfoBox();
     }
     setInfoBox() {
         const div = document.querySelector(`.player${this.index + 1}`);
-        console.log(div);
         div.querySelector(".level").innerHTML = `${this.level}`;
         div.querySelector(".health").innerHTML = `${this.health}`;
         div.querySelector(".power").innerHTML = `${this.power}`;
         div.querySelector(".deaths").innerHTML = `${this.deaths}`;
         div.querySelector(".kills").innerHTML = `${this.kills}`;
-        let angle = find_angle(10, 10, 20, 10);
-        console.log(angle);
     }
 }
 class Game {
@@ -2367,23 +2382,16 @@ class Game {
         //Kupimo mapu:
         this.map = game.map.tiles;
         // Ubacujemo igrace: 
-        const Player1 = {
-            id: 1,
-            info: game.player1
-        };
-        const Player2 = {
-            id: 2,
-            info: game.player2
-        };
-        const Player3 = {
-            id: 3,
-            info: game.player3
-        };
-        const Player4 = {
-            id: 4,
-            info: game.player4
-        };
-        this.players = [
+        const Player1 = game.player1;
+        const Player2 = game.player2;
+        const Player3 = game.player3;
+        const Player4 = game.player4;
+        if (this.players.length) {
+            this.players[0].updatePlayer(Player1);
+            this.players[1].updatePlayer(Player2);
+            this.players[2].updatePlayer(Player3);
+            this.players[3].updatePlayer(Player4);
+        } else this.players = [
             new Character(this.ctx, Player1),
             new Character(this.ctx, Player2),
             new Character(this.ctx, Player3),
@@ -2405,8 +2413,8 @@ class Game {
             if (sgn * cap == -14) break;
         }
         // Crtanje player-a:
-        for(let i = 0; i < 4; i++)//this.drawInstance.drawPlayer(this.players[i].r,this.players[i].q, i );
-        this.drawInstance.drawRotatedPlayer(this.players[i].r, this.players[i].q, i, find_angle(this.players[i].r, this.players[i].q, this.players[i].r - 20, this.players[i].q));
+        for(let i1 = 0; i1 < 4; i1++)//this.drawInstance.drawPlayer(this.players[i].r,this.players[i].q, i );
+        this.drawInstance.drawRotatedPlayer(this.players[i1].r, this.players[i1].q, i1, find_angle(this.players[i1].r, this.players[i1].q, this.players[i1].prevR, this.players[i1].prevQ));
         this.drawInstance.drawBoss();
         if (this.shouldDraw || this.firstRender) requestAnimationFrame(this.draw.bind(this));
         this.firstRender = false;
