@@ -21,7 +21,7 @@ mapBase.src = MapBaseURL;
 tileBorder.src =  TileBorderURL;
 FullTileEntities.src = FullTileEntitiesURL;
 boss.src = BossURL;
-
+let pom = 0;
 
 // Dimenzije za Tajlove =====================================================================================
 const numOfRows = 29;
@@ -33,7 +33,6 @@ const sPlayerW =  44;
 const sPlayerH = 44;
 
 var angle = 0;
-var MapBaseAngle = 0;
 
 // Tipovi entitija: =====================================================================================
 const TileEntity = { // uzima delovi 1, drugi red kako to zna pitate se? ctrl f = 
@@ -46,29 +45,32 @@ const TileEntity = { // uzima delovi 1, drugi red kako to zna pitate se? ctrl f 
 
 
 class Draw{
-
-	constructor({ctx, FullTileEntities}){
+	
+	constructor({ctx, FullTileEntities, playerAngleRotation}){
 		this.ctx = ctx; 
 		this.FullTileEntities = FullTileEntities; 
+		this.playerAngleRotation = 0;
 	}
 
-	drawRotatedPlayer(r, q, index, angle){
-		var [x,y] = convertCoordinates(r, q);		
+	drawRotatedPlayer(player){
+		var [x,y] = convertCoordinates(player.prevR, player.prevQ);		
 		this.ctx.save();
 		this.ctx.translate(x+22,y+22);
-		this.ctx.rotate(angle*Math.PI/180);
-		this.ctx.drawImage(
-			players,		// what image
-			sPlayerW*index, //source image start crop
-			0,				// source image start crop
-			sPlayerW,		//source image width crop
-			sPlayerW,       // source image 
-			-22,
-			-22,
-			44,
-			44
-		)
-		this.ctx.restore();
+		
+			this.ctx.rotate(player.angle*Math.PI/180);
+			this.ctx.drawImage(
+				players,		// what image
+				sPlayerW*player.index, //source image start crop
+				0,				// source image start crop
+				sPlayerW,		//source image width crop
+				sPlayerW,       // source image 
+				-22,
+				-22,
+				44,
+				44
+			)
+		
+		this.ctx.restore();		
 	}
 	
 	// Iscrtavanje podloge mape:
@@ -184,8 +186,7 @@ class Character {
         this.deaths = Player.deaths;
 		this.kills  = Player.kills;
         this.trapped = Player.trapped;
-		this.angle = find_angle(this.prevR, this.prevQ, this.r, this.q);
-		console.log(this.angle);
+		this.angle = find_angle(this.prevR, this.prevQ, this.r, this.q)
 		this.setInfoBox();		
 
 	}
@@ -287,8 +288,7 @@ export class Game {
         }
 		// Crtanje player-a:
 		for(let i=0;i< 4;i++){
-			//this.drawInstance.drawPlayer(this.players[i].r,this.players[i].q, i );
-			this.drawInstance.drawRotatedPlayer(this.players[i].r, this.players[i].q, i, find_angle(this.players[i].prevR, this.players[i].prevQ, this.players[i].r, this.players[i].q));
+			this.drawInstance.drawRotatedPlayer(this.players[i]);
 		}
 		this.drawInstance.drawBoss();	
 
