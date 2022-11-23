@@ -4,13 +4,9 @@
 }
 
 @font-face {
-    font-family: 'neuropol';
-    src: url("../js/NeuropolBold.ttf");
-    font-weight: bold;
-    font-style: normal;
 
     font-family: 'neuropolX';
-    src: url("../js/NeuropolXBold.ttf");
+    src: url("../gif/NeuropolXBold.ttf");
     font-weight: bold;
     font-style: normal;
 }

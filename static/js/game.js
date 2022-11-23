@@ -168,7 +168,7 @@ class Character {
 		
 		this.setInfoBox();			 	
 	}
-	
+
 	updatePlayer(Player){
 		this.prevQ = this.q;
 		this.prevR = this.r;
@@ -184,7 +184,7 @@ class Character {
         this.deaths = Player.deaths;
 		this.kills  = Player.kills;
         this.trapped = Player.trapped;
-		this. angle = find_angle(this.r, this.q , this.prevR, this.players[i].prevQ);
+		this.angle = find_angle(this.prevR, this.prevQ, this.r, this.q);
 		console.log(this.angle);
 		this.setInfoBox();		
 
@@ -197,9 +197,7 @@ class Character {
 		div.querySelector(".health").innerHTML = `${this.health}`;
 		div.querySelector(".power").innerHTML = `${this.power}`;
 		div.querySelector(".deaths").innerHTML = `${this.deaths}`;
-		div.querySelector(".kills").innerHTML = `${this.kills}`;
-    
-		
+		div.querySelector(".kills").innerHTML = `${this.kills}`;		
      }
 }
 
@@ -290,7 +288,7 @@ export class Game {
 		// Crtanje player-a:
 		for(let i=0;i< 4;i++){
 			//this.drawInstance.drawPlayer(this.players[i].r,this.players[i].q, i );
-			this.drawInstance.drawRotatedPlayer(this.players[i].r, this.players[i].q, i, find_angle(this.players[i].r, this.players[i].q, this.players[i].prevR, this.players[i].prevQ));
+			this.drawInstance.drawRotatedPlayer(this.players[i].r, this.players[i].q, i, find_angle(this.players[i].prevR, this.players[i].prevQ, this.players[i].r, this.players[i].q));
 		}
 		this.drawInstance.drawBoss();	
 
@@ -339,5 +337,9 @@ function find_angle(prevR, prevQ,currR, currQ){
 	var AB = Math.sqrt(Math.pow(Bx-Ax, 2) + Math.pow(By -Ay,2));
 	var BC = Math.sqrt(Math.pow(Bx-Cx, 2) + Math.pow(By -Cy,2));
 	var AC = Math.sqrt(Math.pow(Cx-Ax, 2) + Math.pow(Cy -Ay,2));
-	return Math.acos((BC*BC+AB*AB-AC*AC)/(2*BC*AB))*180/Math.PI;
+	var angle =Math.acos((BC*BC+AB*AB-AC*AC)/(2*BC*AB))*180/Math.PI;
+
+	if(Cx < Bx){
+		return 360-angle;
+	} else return angle;
 }
