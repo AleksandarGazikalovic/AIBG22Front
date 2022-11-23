@@ -2,7 +2,7 @@ import qs from 'qs';
 
 
 
-import { Game, Character } from "./game"; // 
+import { Game, Character } from "./Logic/game"; // 
 import { WebsocketHandler } from  "./ws"; //  ovo sa serverom komunicira
 import { API_ROOT } from './configuration'; // lokalno 
 
