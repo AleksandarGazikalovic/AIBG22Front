@@ -12,6 +12,7 @@ const queryArgs = qs.parse( //parsira argumente iz urla
 
 
 const gameId = queryArgs.gameId;
+
 //let audioLoading = new Audio('../js/loading_screen.mp3')
 //audioLoading.play();
 

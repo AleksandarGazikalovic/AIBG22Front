@@ -64,7 +64,9 @@ export class Game {
 			this.players[3].updatePlayer(Player4);
 
 		} else {
+
 			this.players = [
+				
 				new Character(this.ctx, Player1),
 				new Character(this.ctx, Player2),
 				new Character(this.ctx, Player3),

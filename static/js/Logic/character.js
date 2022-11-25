@@ -4,12 +4,18 @@ export class Character {
 
 		this.id = Player.playerIdx;          
 		this.index = this.id - 1; 
-        this.q = Player.q;             
+        this.q = Player.q;      
         this.r = Player.r;
 		[this.x, this.y] = convertCoordinates(this.r, this.q);             
         
 		this.prevQ = this.q;
 		this.prevR = this.r;
+		[this.prevX, this.prevY] = convertCoordinates(this.prevR, this.prevQ);             
+
+		this.difX = 0;
+		this.difY = 0;
+		this.coefXY = 1;
+
 		this.level  = Player.level;
 		
 
@@ -19,27 +25,41 @@ export class Character {
 		this.kills  = Player.kills;
         this.trapped = Player.trapped;
 		this.angle = 0;
-		
+		this.rotated = true;
+		this.moved = true;
 		this.setInfoBox();			 	
 	}
 
 	updatePlayer(Player){
+		this.id = Player.playerIdx;
+		this.index = this.id - 1; 
+
 		this.prevQ = this.q;
 		this.prevR = this.r;
-
-		console.log(this.prevQ,this.prevR,);
-		this.id = Player.playerIdx;           // 
-		this.index = this.id - 1; 
-        this.q = Player.q;             // pozicija
-        this.r = Player.r;             // pozicija
+		[this.prevX, this.prevY] = convertCoordinates(this.prevR, this.prevQ);
+		
+        this.q = Player.q;             
+        this.r = Player.r;
+		[this.x, this.y] = convertCoordinates(this.r, this.q);    
+		
+		this.difX  = this.x - this.prevX;
+		this.difY = this.y - this.prevY;
+		if(this.difX!=0  || this.difY !=0){
+			this.coefXY  = Math.abs(this.difX/this.difY);
+		} else this.coefXY = 1;
+		
         this.level  = Player.level;
 		this.health = Player.health;
 		this.power  = Player.power;
         this.deaths = Player.deaths;
 		this.kills  = Player.kills;
         this.trapped = Player.trapped;
-		this.angle = find_angle(this.prevR, this.prevQ, this.r, this.q)
+		this.difAngle = this.angle;
+		this.angle = find_angle(this.prevR, this.prevQ, this.r, this.q);
+		
 		this.setInfoBox();		
+		this.rotated = false;
+		this.moved = false;
 
 	}
 	
