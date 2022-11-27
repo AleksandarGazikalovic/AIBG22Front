@@ -33,7 +33,7 @@ export class Game {
 					var game = JSON.parse(result.gameState); 
 					this.update(game); 
 					requestAnimationFrame(this.draw.bind(this)); // bind vraca funkciju draw klase game, a prosledjuje joj Game
-				
+					console.log(game);
 				},error: error => {}
 			});
 		});
