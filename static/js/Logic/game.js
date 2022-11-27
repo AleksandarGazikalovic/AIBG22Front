@@ -31,6 +31,7 @@ export class Game {
 				success: result => {					
 					this.drawInstance = new Draw(this.ctx); // Isto kao i prva linija inita-a. Sa svakim zahtevom mi povezujemo game i Draw() klasu. 
 					var game = JSON.parse(result.gameState); 
+					// var attacks = JSON.parse(result.attacks);
 					this.update(game); 
 					requestAnimationFrame(this.draw.bind(this)); // bind vraca funkciju draw klase game, a prosledjuje joj Game
 				
