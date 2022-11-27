@@ -35,11 +35,13 @@ var angle = 0;
 
 // Tipovi entitija: =====================================================================================
 const TileEntity = { // uzima delovi 1, drugi red kako to zna pitate se? ctrl f = 
-    Fence300: { index: 0 },
-    Fence200: { index: 1 },
-    Fence100: { index: 2 },
-    WORMHOLE: { index: 3 },
-    BLACKHOLE:{ index: 4 }
+    Fence300:   { index: 0 },
+    Fence200:   { index: 1 },
+    Fence100:   { index: 2 },
+    WORMHOLE:   { index: 3 },
+    BLACKHOLE:  { index: 4 }, 
+	HEALTH :    { index: 5},
+	EXPERIENCE: {index: 6}
 };
 
 
@@ -189,7 +191,24 @@ export class Draw{
     	);
 		this.ctx.restore();
   	}
+	drawAttackedField(r, q){
+		
+		var [x,y] = convertCoordinates(r, q);
+		//console.log(x,y);
+		this.ctx.drawImage(
+        	FullTileEntities,
+        	0,
+			44,
+			44,
+			44,
+			x,
+			y,
+			44,
+			44
+    	); 
+		//console.log(y, x);
 
+	}
 }
 
 function convertCoordinates(r, q){
