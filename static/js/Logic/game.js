@@ -2,6 +2,7 @@
 import { Draw } from "./draw";
 import { Character } from "./character";
 import { API_ROOT } from "../configuration";
+import { forEach } from "lodash";
 
 const numOfRows = 29;
 
@@ -15,8 +16,10 @@ export class Game {
         this.drawInstance = null; 
         this.map = null;
         this.players = [];
+		this.attackedTiles = [];
         this.shouldDraw = true;
 		this.firstRender = true;
+		this.bossAction = false;
     }
 	
 	//inicijalizacija igrice - poziva se iz index.js
@@ -31,6 +34,7 @@ export class Game {
 				success: result => {					
 					this.drawInstance = new Draw(this.ctx); // Isto kao i prva linija inita-a. Sa svakim zahtevom mi povezujemo game i Draw() klasu. 
 					var game = JSON.parse(result.gameState); 
+					// var attacks = JSON.parse(result.attacks);
 					this.update(game); 
 					requestAnimationFrame(this.draw.bind(this)); // bind vraca funkciju draw klase game, a prosledjuje joj Game
 					console.log(game);
@@ -48,9 +52,13 @@ export class Game {
 			this.showWinner(game.winner);
         }
 
-		//Kupimo mapu:
+		//Kupimo mapu:	
 		this.map = game.map.tiles;
-
+		this.bossAction = game.hugoBoss.bossAction;
+		this.attackedTiles = game.hugoBoss.bossAttackedTiles;
+	
+		
+		
 		
 		// Ubacujemo igrace: 
         const Player1 = game.player1 ;
@@ -98,8 +106,14 @@ export class Game {
 		for(let i=0;i< 4;i++){
 			this.drawInstance.drawRotatedPlayer(this.players[i]);
 		}
+		
 		this.drawInstance.drawBoss();	
-
+		if(this.bossAction==true){
+			this.attackedTiles.forEach(element => {
+				this.drawInstance.drawAttackedField(element.r, element.q);
+			});
+		}
+		//this.drawInstance.drawAttackedField(4,4);
 		if (this.shouldDraw || this.firstRender)  
 			requestAnimationFrame(this.draw.bind(this));
         

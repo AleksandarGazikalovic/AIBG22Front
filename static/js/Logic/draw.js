@@ -35,11 +35,13 @@ var angle = 0;
 
 // Tipovi entitija: =====================================================================================
 const TileEntity = { // uzima delovi 1, drugi red kako to zna pitate se? ctrl f = 
-    Fence300: { index: 0 },
-    Fence200: { index: 1 },
-    Fence100: { index: 2 },
-    WORMHOLE: { index: 3 },
-    BLACKHOLE:{ index: 4 }
+    Fence300:   { index: 0 },
+    Fence200:   { index: 1 },
+    Fence100:   { index: 2 },
+    WORMHOLE:   { index: 3 },
+    BLACKHOLE:  { index: 4 }, 
+	HEALTH :    { index: 5},
+	EXPERIENCE: {index: 6}
 };
 
 
@@ -56,9 +58,8 @@ export class Draw{
 		else if(player.moved == false){
 			this.movePlayer(player);
 		} else{
-			var[x, y] = convertCoordinates(player.r, player.q);	
 			this.ctx.save();
-			this.ctx.translate(x+22,y+22);
+			this.ctx.translate(player.x+22,player.y+22);
 			this.ctx.rotate(player.angle*Math.PI/180);
 			this.ctx.drawImage(
 				players,		// what image
@@ -77,9 +78,9 @@ export class Draw{
 	}
 
 	rotatePlayer(player){
-		var[prevX, prevY] = convertCoordinates(player.prevR, player.prevQ);	
+			
 		this.ctx.save();
-		this.ctx.translate(prevX+22,prevY+22);
+		this.ctx.translate(player.prevX+22,player.prevY+22);
 			this.ctx.rotate(player.difAngle*Math.PI/180);
 			this.ctx.drawImage(
 				players,		// what image
@@ -93,27 +94,10 @@ export class Draw{
 				44
 			)
 		this.ctx.restore();
+
+		calculateAngle(player);
 		
-		if(Math.abs(player.angle - player.difAngle) > 2){
-			if(player.difAngle>=269 && player.angle<=91) {
-				if(player.difAngle>360) {
-					player.difAngle=player.difAngle-360;
-				}
-				player.difAngle = player.difAngle + 3;
-				return;
-			}
-			if(player.angle>=269 && player.difAngle<=91) {
-				if(player.difAngle<0) {
-					player.difAngle=360+player.difAngle;
-				}
-				player.difAngle = player.difAngle - 3;
-				return;
-			}		
-			if(player.angle > player.difAngle){
-				player.difAngle = player.difAngle + 3;
-				
-			} else player.difAngle = player.difAngle - 3;
-		} else player.rotated = true;
+		
 
 	}
 
@@ -135,32 +119,8 @@ export class Draw{
 			)
 		
 		this.ctx.restore();	
+		calculateDifXY(player);
 		
-		if(player.difX > 0){
-			if(player.coefXY <1){
-				player.difX = player.difX- player.coefXY*1;
-			} else player.difX = player.difX- 1;
-		}
-		if(player.difX < 0){
-			if(player.coefXY <1){
-				player.difX = player.difX +  player.coefXY*1;
-			} else player.difX = player.difX +  1;
-		}
-		if(player.difY > 0 ){
-			if(player.coefXY >1){
-				player.difY = player.difY - player.coefXY*1;
-			} else player.difY = player.difY - 1;
-			
-		}
-		if(player.difY < 0){
-			if(player.coefXY >1){
-				player.difY = player.difY + player.coefXY*1;
-			} else player.difY = player.difY + 1;
-		}
-
-		if(player.difX == 0 && player.difY == 0){
-			player.moved = true;
-		}
 	}
 	
 	// Iscrtavanje podloge mape:
@@ -231,7 +191,24 @@ export class Draw{
     	);
 		this.ctx.restore();
   	}
+	drawAttackedField(r, q){
+		
+		var [x,y] = convertCoordinates(r, q);
+		//console.log(x,y);
+		this.ctx.drawImage(
+        	FullTileEntities,
+        	0,
+			44,
+			44,
+			44,
+			x,
+			y,
+			44,
+			44
+    	); 
+		//console.log(y, x);
 
+	}
 }
 
 function convertCoordinates(r, q){
@@ -239,4 +216,57 @@ function convertCoordinates(r, q){
 	let y = (14 + r)*33;
 	return [x,y];
 }
+function calculateAngle(player){
+	if(Math.abs(player.angle - player.difAngle) > 2){
+		var speed = 3;
+		if(player.difAngle>=269 && player.angle<=91) {
+			if(player.difAngle>360) {
+				player.difAngle=player.difAngle-360;
+			}
+			player.difAngle = player.difAngle + speed;
+			return;
+		}
+		if(player.angle>=269 && player.difAngle<=91) {
+			if(player.difAngle<0) {
+				player.difAngle=360+player.difAngle;
+			}
+			player.difAngle = player.difAngle - speed;
+			return;
+		}		
+		if(player.angle > player.difAngle){
+			player.difAngle = player.difAngle + speed;
+			
+		} else player.difAngle = player.difAngle - speed;
+	} else player.rotated = true;
+}
+function calculateDifXY(player){
+	var speed = 1;
+
+	if(player.difX > 0){
+		if(player.coefXY <1){
+			player.difX = player.difX- player.coefXY*speed;
+		} else player.difX = player.difX- speed;
+	}
+	if(player.difX < 0){
+		if(player.coefXY <1){
+			player.difX = player.difX +  player.coefXY*speed;
+		} else player.difX = player.difX +  speed;
+	}
+	if(player.difY > 0 ){
+		if(player.coefXY >1){
+			player.difY = player.difY - player.coefXY*speed;
+		} else player.difY = player.difY - speed;
+		
+	}
+	if(player.difY < 0){
+		if(player.coefXY >1){
+			player.difY = player.difY + player.coefXY*speed;
+		} else player.difY = player.difY + speed;
+	}
+
+	if(player.difX == 0 && player.difY == 0){
+		player.moved = true;
+	}
+}
+
 
