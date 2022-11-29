@@ -90,7 +90,7 @@ export class Game {
 			 	let row = rows[i]
 			 	switch(p){
 			 		case 0:
-			 			 row[p].innerHTML = game.scoreBoard.players[i].kills
+			 			 row[p].innerHTML = game.scoreBoard.players[i].name
 			 			 p++;
 			 		case 1:
 			 			row[p].innerHTML = game.scoreBoard.players[i].kills
