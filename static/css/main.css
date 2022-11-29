@@ -85,7 +85,8 @@ main{
     overflow: hidden;
 }
 #game{
-    width: 100%;
+    width: 86%;
+    padding-left: 4vw;
 }
 .infoBox{
     position: absolute;
@@ -125,19 +126,30 @@ main{
     font-size: 1vh;
 }
 .popup{
-    background-image: url("../gif/popup2.jpg");
-    width: 778px;
-    height: 320px;
+    /* background-image: url("../gif/popup2.jpg"); */
     border-radius: 6px;
     position: absolute;
     top: 0;
     left: 50%;
     transform: translate(-50%,-50%)scale(0.1);
     text-align: center;
-    background-repeat: no-repeat;
     visibility: hidden;
     transition: transform 0.4s, top 0.4s;
     z-index:10;
+
+}
+.popup table{
+    background: rgb(123, 221, 221, 30%);
+    width: 44vw;
+    height: 60vh;
+    border-radius: 12px;
+}
+th{
+    background: rgb(138, 43, 226, 30%);
+    height: 40px;
+}
+.popup table tr:nth-child(odd){
+    background-color: rgb(73, 73, 150, 30%);
 }
 .open-popup{
     visibility: visible;
@@ -145,7 +157,7 @@ main{
     transform: translate(-50%,-50%)scale(1);
     z-index: 10;
 }
-table {
+.player table {
     border-collapse: collapse;
     box-sizing: content-box;
 }

@@ -5,7 +5,11 @@ import { API_ROOT } from "../configuration";
 import { forEach } from "lodash";
 
 const numOfRows = 29;
-
+var row1 = document.querySelectorAll(".prvi td");
+var row2 = document.querySelectorAll(".drugi td");
+var row3 = document.querySelectorAll(".treci td");
+var row4 = document.querySelectorAll(".cetvrti td");
+var rows = [row1,row2,row3,row4]; 
 
 
 export class Game {
@@ -37,7 +41,6 @@ export class Game {
 					// var attacks = JSON.parse(result.attacks);
 					this.update(game); 
 					requestAnimationFrame(this.draw.bind(this)); // bind vraca funkciju draw klase game, a prosledjuje joj Game
-					console.log(game);
 				},error: error => {}
 			});
 		});
@@ -47,11 +50,11 @@ export class Game {
     update(game) {
 		
 		//Ako imamo pobednika, samo to pokazi i tu stani. 
-        if (game.winner !== null) {
-            this.shouldDraw = false;
-			this.showWinner(game.winner);
-        }
-
+        // if (game.winner !== null) {
+        //     this.shouldDraw = false;
+		// 	this.showWinner(game.winner);
+        // }
+		console.log(game)
 		//Kupimo mapu:	
 		this.map = game.map.tiles;
 		this.bossAction = game.hugoBoss.bossAction;
@@ -81,6 +84,28 @@ export class Game {
 				new Character(this.ctx, Player4)
 			];
 		}	
+		//scoreboard
+		for(let i=0;i<4;i++){
+			 	let p=0;
+			 	let row = rows[i]
+			 	switch(p){
+			 		case 0:
+			 			 row[p].innerHTML = game.scoreBoard.players[i].kills
+			 			 p++;
+			 		case 1:
+			 			row[p].innerHTML = game.scoreBoard.players[i].kills
+			 			p++;
+			 		case 2:
+			 			row[p].innerHTML = game.scoreBoard.players[i].deaths	
+			 			p++;
+			 		case 3:
+			 			row[p].innerHTML = game.scoreBoard.players[i].KD
+			 			p++;
+			 		case 4:
+			 			row[p].innerHTML = game.scoreBoard.players[i].score	
+			 			p=0;
+			 	}
+			}
 	}
 	// Iscrtavanje svih elemenata:
 	draw(){
@@ -121,27 +146,23 @@ export class Game {
 	}
 	
 	//winner pop-up
-	async showWinner(winner) {
-		//console.log("uslo je u funkc");
-        //const sleep = ms => new Promise(res => setTimeout(res, ms));
-        //await sleep(2000);
-        this.shouldDraw = false;
-        let text = "Game over";
-        const el = document.querySelector(".finished");
-        if (winner) {
-			text = `${winner.name} won the game!`;
-        }else{
-			text = `Ladies and gentleman, its a draw!`;
-			el.querySelector("p").innerHTML = "";
-        }
-		el.querySelector("h1").innerHTML = text;
-        el.classList.remove("hidden");
-     }
+	// async showWinner(winner) {
+	// 	//console.log("uslo je u funkc");
+    //     //const sleep = ms => new Promise(res => setTimeout(res, ms));
+    //     //await sleep(2000);
+    //     this.shouldDraw = false;
+    //     let text = "Game over";
+    //     const el = document.querySelector(".finished");
+    //     if (winner) {
+	// 		text = `${winner.name} won the game!`;
+    //     }else{
+	// 		text = `Ladies and gentleman, its a draw!`;
+	// 		el.querySelector("p").innerHTML = "";
+    //     }
+	// 	el.querySelector("h1").innerHTML = text;
+    //     el.classList.remove("hidden");
+    //  }
 } 
-
-
-
-
 
 
 

@@ -24,3 +24,18 @@ function updateCountdown(){
 function openPopup(){
   popup.classList.add("open-popup");
 }
+
+//implementiranje ScoreBoard-a na klik
+
+addEventListener("keydown", e=>{
+  if(e.code == "KeyR"){
+  openPopup();
+  }
+})
+addEventListener("keyup", e=>{
+  if(e.code == "KeyR"){
+  popup.classList.remove("open-popup");
+  }
+})
+
+  
