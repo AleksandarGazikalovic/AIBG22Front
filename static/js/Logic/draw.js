@@ -124,7 +124,6 @@ export class Draw{
 	
 	// Iscrtavanje podloge mape:
 	drawMapBase(){
-
 		ctx.drawImage(
 			mapBase,
 			-1,
@@ -190,8 +189,7 @@ export class Draw{
     	);
 		ctx.restore();
   	}
-	drawAttackedField(r, q){
-		
+	drawAttackedTile(r, q){
 		var [x,y] = convertCoordinates(r, q);
 		//console.log(x,y);
 		ctx.drawImage(

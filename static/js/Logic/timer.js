@@ -1,6 +1,7 @@
-export class TImer{
+export class Timer{
     constructor(timer){
-        this.updateCountdown(timer);
+      this.timer = timer;
+        this.updateCountdown(this.timer);
     }
     
     updateCountdown(timer){

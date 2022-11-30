@@ -2,6 +2,7 @@
 import { Draw } from "./draw";
 import { Character } from "./character";
 import { API_ROOT } from "../configuration";
+import { Timer } from "./timer";
 import { forEach } from "lodash";
 
 const numOfRows = 29;
@@ -49,7 +50,7 @@ export class Game {
 	}		
 
 	// Kupljenje podataka iz GameState-a:
-    update(game) {
+    update(game, time) {
 		
 		//Ako imamo pobednika, samo to pokazi i tu stani. 
         // if (game.winner !== null) {
@@ -61,8 +62,8 @@ export class Game {
 		this.map = game.map.tiles;
 		this.bossAction = game.hugoBoss.bossAction;
 		this.attackedTiles = game.hugoBoss.bossAttackedTiles;
-		this.time = new TImer(time);
-		// this.time.updateCountdown(time);	
+		this.time = new Timer(time);
+		
 		
 		
 		// Ubacujemo igrace: 
@@ -118,55 +119,43 @@ export class Game {
 		this.drawInstance.drawMapBase();
 		
 		// Crtanje tile-ova:
-        let cap = 15; 
-        let sgn = 1; 
-        for (let y = 0; y <= numOfRows; y++) {
-			for (let x = 0; x < cap; x++) {
-				this.drawInstance.drawTile(this.map[y][x]);
-
-            }
-			if(cap == 29) sgn = -1;
-            cap = cap + sgn;
-			if(sgn*cap == -14) break;
-        }
+		drawTiles(this.map, this.drawInstance);
+        
 		// Crtanje player-a:
 		for(let i=0;i< 4;i++){
 			this.drawInstance.drawRotatedPlayer(this.players[i]);
 		}
-		
-		this.drawInstance.drawBoss();	
+		// Crtanje Boss-a:
+		this.drawInstance.drawBoss();
+
 		if(this.bossAction==true){
 			this.attackedTiles.forEach(element => {
-				this.drawInstance.drawAttackedField(element.r, element.q);
+				this.drawInstance.drawAttackedTile(element.r, element.q);
 			});
 		}
 		this.drawInstance.drawLaserAttack();
-		//this.drawInstance.drawAttackedField(4,4);
+		
 		if (this.shouldDraw || this.firstRender)  
 			requestAnimationFrame(this.draw.bind(this));
         
 		this.firstRender = false;
 	}
 	
-	//winner pop-up
-	// async showWinner(winner) {
-	// 	//console.log("uslo je u funkc");
-    //     //const sleep = ms => new Promise(res => setTimeout(res, ms));
-    //     //await sleep(2000);
-    //     this.shouldDraw = false;
-    //     let text = "Game over";
-    //     const el = document.querySelector(".finished");
-    //     if (winner) {
-	// 		text = `${winner.name} won the game!`;
-    //     }else{
-	// 		text = `Ladies and gentleman, its a draw!`;
-	// 		el.querySelector("p").innerHTML = "";
-    //     }
-	// 	el.querySelector("h1").innerHTML = text;
-    //     el.classList.remove("hidden");
-    //  }
+	
 } 
 
+function drawTiles(map, drawInstance){
+	let cap = 15; 
+	let sgn = 1; 
+	for (let y = 0; y <= numOfRows; y++) {
+		for (let x = 0; x < cap; x++) {
+			drawInstance.drawTile(map[y][x]);
 
+	}
+	if(cap == 29) sgn = -1;
+	cap = cap + sgn;
+	if(sgn*cap == -14) break;
+}
+}
 
 
