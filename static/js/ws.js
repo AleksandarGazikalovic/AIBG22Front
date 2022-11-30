@@ -12,8 +12,8 @@ export class WebsocketHandler {
         console.log(message);
         const data = JSON.parse(message.data);
         this.game.update(data, data.player1, data.player2);
-        if (data.winner !== null) {
-            this.game.showWinner(data.winner);
-        }
+        // if (data.winner !== null) {
+        //     this.game.showWinner(data.winner);
+        // }
     }
 }
