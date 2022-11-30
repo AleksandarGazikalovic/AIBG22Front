@@ -2,7 +2,6 @@
 import { Draw } from "./draw";
 import { Character } from "./character";
 import { API_ROOT } from "../configuration";
-import { forEach } from "lodash";
 
 const numOfRows = 29;
 
@@ -74,7 +73,7 @@ export class Game {
 		} else {
 
 			this.players = [
-				
+
 				new Character(this.ctx, Player1),
 				new Character(this.ctx, Player2),
 				new Character(this.ctx, Player3),
@@ -113,6 +112,7 @@ export class Game {
 				this.drawInstance.drawAttackedField(element.r, element.q);
 			});
 		}
+		this.drawInstance.drawLaserAttack();
 		//this.drawInstance.drawAttackedField(4,4);
 		if (this.shouldDraw || this.firstRender)  
 			requestAnimationFrame(this.draw.bind(this));
