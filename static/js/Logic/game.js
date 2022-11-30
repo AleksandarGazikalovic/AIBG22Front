@@ -2,6 +2,7 @@
 import { Draw } from "./draw";
 import { Character } from "./character";
 import { API_ROOT } from "../configuration";
+import { TImer} from "./timer";
 import { forEach } from "lodash";
 
 const numOfRows = 29;
@@ -24,6 +25,7 @@ export class Game {
         this.shouldDraw = true;
 		this.firstRender = true;
 		this.bossAction = false;
+		this.time=null;
     }
 	
 	//inicijalizacija igrice - poziva se iz index.js
@@ -37,7 +39,8 @@ export class Game {
 				dataType: "json",
 				success: result => {					
 					this.drawInstance = new Draw(this.ctx); // Isto kao i prva linija inita-a. Sa svakim zahtevom mi povezujemo game i Draw() klasu. 
-					var game = JSON.parse(result.gameState); 
+					var game = JSON.parse(result.gameState);
+					var time = JSON.parse(result.time);
 					// var attacks = JSON.parse(result.attacks);
 					this.update(game); 
 					requestAnimationFrame(this.draw.bind(this)); // bind vraca funkciju draw klase game, a prosledjuje joj Game
@@ -45,7 +48,7 @@ export class Game {
 			});
 		});
 	}		
-	
+
 	// Kupljenje podataka iz GameState-a:
     update(game) {
 		
@@ -54,13 +57,13 @@ export class Game {
         //     this.shouldDraw = false;
 		// 	this.showWinner(game.winner);
         // }
-		console.log(game)
+		
 		//Kupimo mapu:	
 		this.map = game.map.tiles;
 		this.bossAction = game.hugoBoss.bossAction;
 		this.attackedTiles = game.hugoBoss.bossAttackedTiles;
-	
-		
+		this.time = new TImer(time);
+		// this.time.updateCountdown(time);	
 		
 		
 		// Ubacujemo igrace: 
@@ -99,7 +102,7 @@ export class Game {
 			 			row[p].innerHTML = game.scoreBoard.players[i].deaths	
 			 			p++;
 			 		case 3:
-			 			row[p].innerHTML = game.scoreBoard.players[i].KD
+			 			row[p].innerHTML = game.scoreBoard.players[i].kd
 			 			p++;
 			 		case 4:
 			 			row[p].innerHTML = game.scoreBoard.players[i].score	
