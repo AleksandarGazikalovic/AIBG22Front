@@ -42,7 +42,7 @@ export class Game {
 					var game = JSON.parse(result.gameState);
 					var time = JSON.parse(result.time);
 					// var attacks = JSON.parse(result.attacks);
-					this.update(game); 
+					this.update(game, time); 
 					requestAnimationFrame(this.draw.bind(this)); // bind vraca funkciju draw klase game, a prosledjuje joj Game
 				},error: error => {}
 			});
@@ -63,8 +63,6 @@ export class Game {
 		this.bossAction = game.hugoBoss.bossAction;
 		this.attackedTiles = game.hugoBoss.bossAttackedTiles;
 		this.time = new Timer(time);
-		
-		
 		
 		// Ubacujemo igrace: 
         const Player1 = game.player1 ;

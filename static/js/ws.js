@@ -9,9 +9,10 @@ export class WebsocketHandler {
         console.info("Websocket connected")
     }
     onMessage(message) {
-        console.log(message);
         const data = JSON.parse(message.data);
-        this.game.update(data, data.player1, data.player2);
+        const gameState = JSON.parse(data.gameState);
+        const time = JSON.parse(data.time);
+        this.game.update(gameState, time);
         // if (data.winner !== null) {
         //     this.game.showWinner(data.winner);
         // }
