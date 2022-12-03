@@ -99,7 +99,6 @@ export class Draw{
 	}
 
 	movePlayer(player){
-		
 		ctx.save();
 		ctx.translate(player.x - player.difX+22, player.y - player.difY+22);
 			ctx.rotate(player.angle*Math.PI/180);
@@ -206,58 +205,14 @@ export class Draw{
 
 	}
 
-	drawLaserAttack(startR, startQ, endR, endQ){
-		console.log("e");
-		var [startX, startY] = convertCoordinates(startR, startQ);
-		var [endX, endY] = convertCoordinates(endR, endQ);
-		startX = startX +22;
-		startY = startY+22;
-		endX = endX+22;
-		endY = endY+22;
-		(function () {
-			var lastTime = 0;
-			var vendors = ['ms', 'moz', 'webkit', 'o'];
-			for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-				window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-				window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
-			}
-		
-			if (!window.requestAnimationFrame) window.requestAnimationFrame = function (callback, element) {
-				var currTime = new Date().getTime();
-				var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-				var id = window.setTimeout(function () {
-					callback(currTime + timeToCall);
-				},
-				timeToCall);
-				lastTime = currTime + timeToCall;
-				return id;
-			};
-		
-			if (!window.cancelAnimationFrame) window.cancelAnimationFrame = function (id) {
-				clearTimeout(id);
-			};
-		}());
-		var t = 1;
-		var vertices = [{x: startX,y: startY},{x: endX, y: endY }];
-				
-		var points = calcWaypoints(vertices);
-				
-		
-		//animate();
-		/*	
-		function animate() {
-			if (t < points.length - 1) {
-				requestAnimationFrame(animate);
-			}
-			ctx.beginPath();
-			ctx.lineWidth = 1;
-			ctx.strokeStyle = "orange";
-			ctx.moveTo(points[t - 1].x, points[t - 1].y);
-			ctx.lineTo(points[t].x, points[t].y);
-			ctx.stroke();			
-			t++;
-		} */
-		
+	drawLaserAttack(player){
+		ctx.beginPath();
+		ctx.strokeStyle = "orange";
+		ctx.lineWidth = 1;
+		ctx.moveTo(player.x +22,player.y +22);
+		ctx.lineTo(player.attackedX + 22 - player.difLaserX, player.attackedY + 22 - player.difLaserY);
+		ctx.stroke();
+		calculateDifLaserXY(player);	
 	}
 		
 }
@@ -267,6 +222,7 @@ function convertCoordinates(r, q){
 	let y = (14 + r)*33;
 	return [x,y];
 }
+
 function calculateAngle(player){
 	if(Math.abs(player.angle - player.difAngle) > 2){
 		var speed = 3;
@@ -290,6 +246,8 @@ function calculateAngle(player){
 		} else player.difAngle = player.difAngle - speed;
 	} else player.rotated = true;
 }
+
+
 function calculateDifXY(player){
 	var speed = 1;
 
@@ -319,26 +277,36 @@ function calculateDifXY(player){
 		player.moved = true;
 	}
 }
+function calculateDifLaserXY(player){
+	var speed = 8;
 
-// Laser Attacks
-function calcWaypoints(vertices) {
-	var speed = 100;
-    var waypoints = [];
-    for (var i = 1; i < vertices.length; i++) {
-        var pt0 = vertices[i - 1];
-        var pt1 = vertices[i];
-        var dx = pt1.x - pt0.x;
-        var dy = pt1.y - pt0.y;
-        for (var j = 0; j < speed; j++) {
-            var x = pt0.x + dx * j / speed;
-            var y = pt0.y + dy * j / speed;
-            waypoints.push({
-                x: x,
-                y: y
-            });
-        }
-    }
-    return (waypoints);
+	if(player.difLaserX > 0){
+		if(player.coefLaser <1){
+			player.difLaserX = player.difLaserX- player.coefLaser*speed;
+		} else player.difLaserX = player.difLaserX- speed;
+	}
+	if(player.difLaserX < 0){
+		if(player.coefLaser <1){
+			player.difLaserX = player.difLaserX +  player.coefLaser*speed;
+		} else player.difLaserX = player.difLaserX +  speed;
+	}
+	if(player.difLaserY > 0 ){
+		if(player.coefLaser >1){
+			player.difLaserY = player.difLaserY - player.coefLaser*speed;
+		} else player.difLaserY = player.difLaserY - speed;
+		
+	}
+	if(player.difLaserY < 0){
+		if(player.coefLaser >1){
+			player.difLaserY = player.difLaserY + player.coefLaser*speed;
+		} else player.difLaserY = player.difLaserY + speed;
+	}
+
+	if(player.difLaserX == 0 && player.difLaserY == 0){
+		player.laserDrawn = true;
+	}
 }
+
+
 
 

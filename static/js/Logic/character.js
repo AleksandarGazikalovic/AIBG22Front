@@ -28,6 +28,11 @@ export class Character {
 		
 		this.attackedQ = null;
 		this.attackedR = null;
+		this.attackedX = null;
+		this.attackedY = null;
+		this.difLaserX = 0;
+		this.difLaserY = 0;
+		this.coefLaser = 1;
 		this.setInfoBox();			 	
 	}
 
@@ -70,15 +75,31 @@ export class Character {
 		this.angle = find_angle(this.prevR, this.prevQ, this.r, this.q);			
 			
 		} else if(playerAttack != null && playerAttack.playerIdx == this.id){	
-					
+			this.prevQ = this.q;
+		this.prevR = this.r;
+		[this.prevX, this.prevY] = convertCoordinates(this.prevR, this.prevQ);
+
+		// Trenutni potez: 
+		this.q = Player.q;             
+		this.r = Player.r;
+		[this.x, this.y] = convertCoordinates(this.r, this.q); 
 			// Ugao za rotaciju:
 			this.difAngle = this.angle;
 			this.attackedQ = playerAttack.q;
 			this.attackedR = playerAttack.r;
-			this.angle = find_angle(this.r, this.q,  this.attackedR, this.attackedQ);		
 			
+			[this.attackedX, this.attackedY] = convertCoordinates(this.attackedR , this.attackedQ);
+			console.log(this.attackedX, this.attackedY);
+			this.angle = find_angle(this.r, this.q, this.attackedR, this.attackedQ);			
+			this.difLaserX = this.attackedX - this.x;
+			this.difLaserY = this.attackedY - this.y;
+			if(this.difLaserX!=0  || this.difLaserY !=0){
+				this.coefLaser  = Math.abs(this.difLaserX/this.difLaserY);
+			} else this.coefLaser = 1;
+
 			this.rotated = false;
 			this.moved = true;
+			this.laserDrawn = false;
 		} 				
 	}
 

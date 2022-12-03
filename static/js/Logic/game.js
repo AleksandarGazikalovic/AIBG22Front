@@ -113,9 +113,10 @@ export class Game {
 		
 		// Crtanje tile-ova:
 		drawTiles(this.map, this.drawInstance);
+
+		// Crtanje Laser-a:
         if(this.playerAttack != null){
-			//this.ctx.clearRect(this.players[this.playerAttack.playerIdx -1].r,this.players[this.playerAttack.playerIdx -1].q,this.playerAttack.r, this.playerAttack.q);
-			this.drawInstance.drawLaserAttack(this.players[this.playerAttack.playerIdx -1].r,this.players[this.playerAttack.playerIdx -1].q,this.playerAttack.r, this.playerAttack.q);
+			this.drawInstance.drawLaserAttack(this.players[this.playerAttack.playerIdx -1]);
 		}
 		// Crtanje player-a:
 		for(let i=0;i< 4;i++){
