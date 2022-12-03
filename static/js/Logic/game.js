@@ -25,6 +25,7 @@ export class Game {
         this.shouldDraw = true;
 		this.firstRender = true;
 		this.bossAction = false;
+		this.playerAttack = null;
 		this.time=null;
     }
 	
@@ -41,8 +42,9 @@ export class Game {
 					this.drawInstance = new Draw(this.ctx); // Isto kao i prva linija inita-a. Sa svakim zahtevom mi povezujemo game i Draw() klasu. 
 					var game = JSON.parse(result.gameState);
 					var time = JSON.parse(result.time);
+					var playerAttack = JSON.parse(result.playerAttack);
 					// var attacks = JSON.parse(result.attacks);
-					this.update(game, time); 
+					this.update(game, time, playerAttack); 
 					requestAnimationFrame(this.draw.bind(this)); // bind vraca funkciju draw klase game, a prosledjuje joj Game
 				},error: error => {}
 			});
@@ -50,35 +52,27 @@ export class Game {
 	}		
 
 	// Kupljenje podataka iz GameState-a:
-    update(game, time) {
-		
-		//Ako imamo pobednika, samo to pokazi i tu stani. 
-        // if (game.winner !== null) {
-        //     this.shouldDraw = false;
-		// 	this.showWinner(game.winner);
-        // }
+    update(game, time, playerAttack) {		
 		
 		//Kupimo mapu:	
 		this.map = game.map.tiles;
 		this.bossAction = game.hugoBoss.bossAction;
 		this.attackedTiles = game.hugoBoss.bossAttackedTiles;
 		this.time = new Timer(time);
-		
+		this.playerAttack = playerAttack;
 		// Ubacujemo igrace: 
         const Player1 = game.player1 ;
 		const Player2 =game.player2 ;
         const Player3 = game.player3 ;
         const Player4 =game.player4 ;
 		if(this.players.length){
-			this.players[0].updatePlayer(Player1);
-			this.players[1].updatePlayer(Player2);
-			this.players[2].updatePlayer(Player3);
-			this.players[3].updatePlayer(Player4);
+			this.players[0].updatePlayer(Player1, playerAttack);
+			this.players[1].updatePlayer(Player2, playerAttack);
+			this.players[2].updatePlayer(Player3, playerAttack);
+			this.players[3].updatePlayer(Player4, playerAttack);
 
 		} else {
-
 			this.players = [
-
 				new Character(this.ctx, Player1),
 				new Character(this.ctx, Player2),
 				new Character(this.ctx, Player3),
@@ -114,11 +108,15 @@ export class Game {
 			return;
         }
 		// Crtanje MapBase-a:
+		
 		this.drawInstance.drawMapBase();
 		
 		// Crtanje tile-ova:
 		drawTiles(this.map, this.drawInstance);
-        
+        if(this.playerAttack != null){
+			//this.ctx.clearRect(this.players[this.playerAttack.playerIdx -1].r,this.players[this.playerAttack.playerIdx -1].q,this.playerAttack.r, this.playerAttack.q);
+			this.drawInstance.drawLaserAttack(this.players[this.playerAttack.playerIdx -1].r,this.players[this.playerAttack.playerIdx -1].q,this.playerAttack.r, this.playerAttack.q);
+		}
 		// Crtanje player-a:
 		for(let i=0;i< 4;i++){
 			this.drawInstance.drawRotatedPlayer(this.players[i]);
@@ -131,12 +129,15 @@ export class Game {
 				this.drawInstance.drawAttackedTile(element.r, element.q);
 			});
 		}
-		this.drawInstance.drawLaserAttack();
+		
+		
+		
 		
 		if (this.shouldDraw || this.firstRender)  
 			requestAnimationFrame(this.draw.bind(this));
         
 		this.firstRender = false;
+		
 	}
 	
 	

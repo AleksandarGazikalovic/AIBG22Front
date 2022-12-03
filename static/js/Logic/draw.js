@@ -51,12 +51,14 @@ export class Draw{
 	}
 
 	drawRotatedPlayer(player){
+
 		if(player.rotated == false){
 			this.rotatePlayer(player);
 		}		
 		else if(player.moved == false){
 			this.movePlayer(player);
 		} else{
+
 			ctx.save();
 			ctx.translate(player.x+22,player.y+22);
 			ctx.rotate(player.angle*Math.PI/180);
@@ -70,14 +72,14 @@ export class Draw{
 				-22,
 				44,
 				44
-			)
-		
-		ctx.restore();	
+			)		
+			ctx.restore();	
+
 		}
 	}
 
 	rotatePlayer(player){
-			
+		
 		ctx.save();
 		ctx.translate(player.prevX+22,player.prevY+22);
 			ctx.rotate(player.difAngle*Math.PI/180);
@@ -93,11 +95,7 @@ export class Draw{
 				44
 			)
 		ctx.restore();
-
 		calculateAngle(player);
-		
-		
-
 	}
 
 	movePlayer(player){
@@ -129,6 +127,7 @@ export class Draw{
 			-1,
 			-3
 		)
+		
 	};
 	// Iscrtavanje Boss-a:
 	drawBoss(){
@@ -189,7 +188,7 @@ export class Draw{
     	);
 		ctx.restore();
   	}
-	drawAttackedTile(r, q){
+	drawAttackedTile(r,q){
 		var [x,y] = convertCoordinates(r, q);
 		//console.log(x,y);
 		ctx.drawImage(
@@ -207,7 +206,14 @@ export class Draw{
 
 	}
 
-	drawLaserAttack(){
+	drawLaserAttack(startR, startQ, endR, endQ){
+		console.log("e");
+		var [startX, startY] = convertCoordinates(startR, startQ);
+		var [endX, endY] = convertCoordinates(endR, endQ);
+		startX = startX +22;
+		startY = startY+22;
+		endX = endX+22;
+		endY = endY+22;
 		(function () {
 			var lastTime = 0;
 			var vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -232,27 +238,26 @@ export class Draw{
 			};
 		}());
 		var t = 1;
-		var vertices = [{x: 10,y: 10},{x: 100,y: 100 }];
-		
-		
-		
+		var vertices = [{x: startX,y: startY},{x: endX, y: endY }];
+				
 		var points = calcWaypoints(vertices);
-		animate();	
-		ctx.lineWidth = 1;
-		ctx.strokeStyle = "orange";
+				
+		
+		//animate();
+		/*	
 		function animate() {
 			if (t < points.length - 1) {
 				requestAnimationFrame(animate);
 			}
-			// draw a line segment from the last waypoint
-			// to the current waypoint
 			ctx.beginPath();
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = "orange";
 			ctx.moveTo(points[t - 1].x, points[t - 1].y);
 			ctx.lineTo(points[t].x, points[t].y);
-			ctx.stroke();
-			// increment "t" to get the next waypoint
+			ctx.stroke();			
 			t++;
-		}
+		} */
+		
 	}
 		
 }
