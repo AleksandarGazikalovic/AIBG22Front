@@ -2,6 +2,7 @@
 
 import PlayersURL from "../../gif/Players.png";
 import MapBaseURL from "../../gif/MapBase.png";
+import MapFrameURL from "../../gif/MapFrame.png";
 import TileBorderURL from "../../gif/TileBorder.png"
 import FullTileEntitiesURL from "../../gif/Tiles.png";
 import BossURL from "../../gif/Boss.png";
@@ -11,12 +12,14 @@ import BossURL from "../../gif/Boss.png";
 
 let players = new Image();	
 let mapBase = new Image();
+let mapFrame = new Image();
 let tileBorder = new Image();
 let FullTileEntities = new Image();
 let boss = new Image();
 
 players.src = PlayersURL;
 mapBase.src = MapBaseURL;
+mapFrame.src = MapFrameURL;
 tileBorder.src =  TileBorderURL;
 FullTileEntities.src = FullTileEntitiesURL;
 boss.src = BossURL;
@@ -32,7 +35,7 @@ const sPlayerW =  44;
 const sPlayerH = 44;
 
 var angle = 0;
-
+var angle1 =0;
 // Tipovi entitija: =====================================================================================
 const TileEntity = { // uzima delovi 1, drugi red kako to zna pitate se? ctrl f = 
     Fence300:   { index: 0 },
@@ -121,13 +124,26 @@ export class Draw{
 	
 	// Iscrtavanje podloge mape:
 	drawMapBase(){
+		ctx.save();
+		ctx.translate(551, 488);
+		ctx.rotate(angle1*Math.PI/180);
+		
 		ctx.drawImage(
 			mapBase,
+			-551,
+			-551
+		)
+			angle1 = angle1+0.02;
+		ctx.restore();
+	};
+	drawMapFrame(){
+		ctx.drawImage(
+			mapFrame,
 			-1,
 			-3
 		)
-		
-	};
+
+	}
 	// Iscrtavanje Boss-a:
 	drawBoss(){
 		ctx.drawImage(

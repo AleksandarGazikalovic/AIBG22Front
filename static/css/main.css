@@ -9,7 +9,9 @@
     src: url("../gif/NeuropolXBold.ttf");
     font-weight: bold;
     font-style: normal;
+
 }
+
 body, html {
     position: relative;
     background-size:cover;
