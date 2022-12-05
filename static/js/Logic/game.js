@@ -101,6 +101,97 @@ export class Game {
 			 			p=0;
 			 	}
 			}
+			// let f=1
+			// let d = document.getElementById(`rt${f}`)
+			// d.classList.remove("visibility")
+			// console.log(d.classList)
+			
+			
+			
+			  for(let i=0;i<3;i++){
+			  	if(game.scoreBoard.players[i].playerIdx == 1){
+			  		document.getElementById(`rt${i+1}`).classList.add("visibility")
+			 		if(i==0){
+			 		 	document.getElementById(`rt${i+2}`).classList.remove("visibility")
+			 		 	document.getElementById(`rt${i+3}`).classList.remove("visibility")
+			 		}
+					if(i==1){
+						document.getElementById(`rt${i}`).classList.remove("visibility")
+						document.getElementById(`rt${i+2}`).classList.remove("visibility")
+					}
+					if(i==2){
+						document.getElementById(`rt${i-1}`).classList.remove("visibility")
+						document.getElementById(`rt${i}`).classList.remove("visibility")
+					}
+
+			  	}
+			  	if(game.scoreBoard.players[i].playerIdx == 2){
+			  		document.getElementById(`rd${i+1}`).classList.add("visibility")
+					if(i==0){
+						document.getElementById(`rd${i+2}`).classList.remove("visibility")
+						document.getElementById(`rd${i+3}`).classList.remove("visibility")
+					}
+					if(i==1){
+						document.getElementById(`rd${i}`).classList.remove("visibility")
+						document.getElementById(`rd${i+2}`).classList.remove("visibility")
+					}
+					if(i==2){
+						document.getElementById(`rd${i-1}`).classList.remove("visibility")
+						document.getElementById(`rd${i}`).classList.remove("visibility")
+					}
+			  	}
+			  	if(game.scoreBoard.players[i].playerIdx == 3){
+			  		document.getElementById(`lt${i+1}`).classList.add("visibility")
+					if(i==0){
+						document.getElementById(`lt${i+2}`).classList.remove("visibility")
+						document.getElementById(`lt${i+3}`).classList.remove("visibility")
+					}
+					if(i==1){
+						document.getElementById(`lt${i}`).classList.remove("visibility")
+						document.getElementById(`lt${i+2}`).classList.remove("visibility")
+					}
+					if(i==2){
+						document.getElementById(`lt${i-1}`).classList.remove("visibility")
+						document.getElementById(`lt${i}`).classList.remove("visibility")
+					}
+			  	}
+			  	if(game.scoreBoard.players[i].playerIdx == 4){
+			  		document.getElementById(`ld${i+1}`).classList.add("visibility")
+					if(i==0){
+						document.getElementById(`ld${i+2}`).classList.remove("visibility")
+						document.getElementById(`ld${i+3}`).classList.remove("visibility")
+					}
+					if(i==1){
+						document.getElementById(`ld${i}`).classList.remove("visibility")
+						document.getElementById(`ld${i+2}`).classList.remove("visibility")
+					}
+					if(i==2){
+						document.getElementById(`ld${i-1}`).classList.remove("visibility")
+						document.getElementById(`ld${i}`).classList.remove("visibility")
+					}
+			  	}
+			  }
+			  let fourthPlace = game.scoreBoard.players[3];
+			  if(fourthPlace.playerIdx==1){
+				document.getElementById(`rt1`).classList.remove("visibility")
+				document.getElementById(`rt2`).classList.remove("visibility")
+				document.getElementById(`rt3`).classList.remove("visibility")
+			  }
+			  if(fourthPlace.playerIdx==2){
+				document.getElementById(`rd1`).classList.remove("visibility")
+				document.getElementById(`rd2`).classList.remove("visibility")
+				document.getElementById(`rd3`).classList.remove("visibility")
+			  }
+			  if(fourthPlace.playerIdx==3){
+				document.getElementById(`lt1`).classList.remove("visibility")
+				document.getElementById(`lt2`).classList.remove("visibility")
+				document.getElementById(`lt3`).classList.remove("visibility")
+			  }
+			  if(fourthPlace.playerIdx==4){
+				document.getElementById(`ld1`).classList.remove("visibility")
+				document.getElementById(`ld2`).classList.remove("visibility")
+				document.getElementById(`ld3`).classList.remove("visibility")
+			  }
 	}
 	// Iscrtavanje svih elemenata:
 	draw(){

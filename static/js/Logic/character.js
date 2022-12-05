@@ -19,12 +19,14 @@ export class Character {
 		this.rotated = true;
 		this.moved = true;
 
+		this.name = Player.name;
 		this.level  = Player.level;
 		this.health = Player.health;
 		this.power  = Player.power;
         this.deaths = Player.deaths;
 		this.kills  = Player.kills;
         this.trapped = Player.trapped;
+		this.score = Player.score;
 		
 		this.attackedQ = null;
 		this.attackedR = null;
@@ -45,6 +47,7 @@ export class Character {
         this.deaths = Player.deaths;
 		this.kills  = Player.kills;
     	this.trapped = Player.trapped;
+		this.score = Player.score;
 		this.setInfoBox();	
 		this.attackedQ =null;
 			this.attackedR = null;
@@ -89,7 +92,7 @@ export class Character {
 			this.attackedR = playerAttack.r;
 			
 			[this.attackedX, this.attackedY] = convertCoordinates(this.attackedR , this.attackedQ);
-			console.log(this.attackedX, this.attackedY);
+			// console.log(this.attackedX, this.attackedY);
 			this.angle = find_angle(this.r, this.q, this.attackedR, this.attackedQ);			
 			this.difLaserX = this.attackedX - this.x;
 			this.difLaserY = this.attackedY - this.y;
@@ -107,11 +110,12 @@ export class Character {
 	setInfoBox() {
 		const div = document.querySelector(`.player${this.index+1}`);
 		
+		div.querySelector(".name").innerHTML = `${this.name}`;
 		div.querySelector(".level").innerHTML = `${this.level}`;
 		div.querySelector(".health").innerHTML = `${this.health}`;
-		div.querySelector(".power").innerHTML = `${this.power}`;
+		div.querySelector(".kills").innerHTML = `${this.kills}`;
 		div.querySelector(".deaths").innerHTML = `${this.deaths}`;
-		div.querySelector(".kills").innerHTML = `${this.kills}`;		
+		div.querySelector(".score").innerHTML = `${this.score}`;		
      }
 }
 

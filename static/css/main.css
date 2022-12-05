@@ -10,6 +10,13 @@
     font-weight: bold;
     font-style: normal;
 }
+header{
+    
+}
+header img{
+    width: 100%;
+    height: 100%;
+}
 body, html {
     position: relative;
     background-size:cover;
@@ -47,6 +54,37 @@ main{
     position: absolute;
     top:0px;
     bottom: 0px;
+}
+.rt{
+    position: absolute;
+    right: 13%;
+    top:7%;
+    width: 50px;
+    visibility: hidden;
+}
+.rd{
+    position: absolute;
+    right: 13%;
+    bottom:7%;
+    width: 50px;
+    visibility: hidden;
+}
+.lt{
+    position: absolute;
+    left: 13%;
+    top:7%;
+    width: 50px;
+    visibility: hidden;
+}
+.ld{
+    position: absolute;
+    left: 13%;
+    bottom:7%;
+    width: 50px;
+    visibility: hidden;
+}
+.visibility{
+    visibility: visible;
 }
 .player1{ 
     flex-basis: 40%;
