@@ -201,6 +201,7 @@ export class Game {
 		// Crtanje MapBase-a:
 		
 		this.drawInstance.drawMapBase();
+		this.drawInstance.drawMapFrame();
 		
 		// Crtanje tile-ova:
 		drawTiles(this.map, this.drawInstance);
