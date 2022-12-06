@@ -34,8 +34,11 @@ const sTileH =  44; // Skraceno od  - Source Tile Height - Visinu koju uzima od 
 const sPlayerW =  44; 
 const sPlayerH = 44;
 
-var angle = 0;
-var angle1 =0;
+var angle = 0; // rotacija entiteta
+var angle1 =0; // rotacija pozadine mape;
+var helper = true;
+var i=44;
+
 // Tipovi entitija: =====================================================================================
 const TileEntity = { // uzima delovi 1, drugi red kako to zna pitate se? ctrl f = 
     Fence300:   { index: 0 },
@@ -205,6 +208,8 @@ export class Draw{
   	}
 	drawAttackedTile(r,q){
 		var [x,y] = convertCoordinates(r, q);
+		
+		
 		//console.log(x,y);
 		ctx.drawImage(
         	FullTileEntities,
@@ -217,18 +222,41 @@ export class Draw{
 			44,
 			44
     	); 
-		//console.log(y, x);
-
+		
+		
 	}
 
 	drawLaserAttack(player){
+		if(player.rotated == true){
+			if(player.laserDrawn == false){
+				ctx.beginPath();
+				ctx.strokeStyle = "orange";
+				ctx.lineWidth = 1;
+				ctx.moveTo(player.x +22,player.y +22);
+				ctx.lineTo(player.attackedX + 22 - player.difLaserX, player.attackedY + 22 - player.difLaserY);
+				ctx.stroke();
+				calculateDifLaserXY(player);
+			} else{
+				ctx.beginPath();
+				ctx.strokeStyle = "orange";
+				ctx.lineWidth = 1;
+				ctx.moveTo(player.x +22,player.y +22);
+				ctx.lineTo(player.attackedX + 22, player.attackedY + 22);
+				ctx.stroke();
+				calculateDifLaserXY(player);
+			}
+			if(player.laserDrawn == true)
+				this.drawAttackedTile(player.attackedR, player.attackedQ);
+		}	
+	}
+	drawBossLaserAttack(endR, endQ){	
+		var [endX, endY] = convertCoordinates(endR, endQ);		
 		ctx.beginPath();
-		ctx.strokeStyle = "orange";
+		ctx.strokeStyle = "red";
 		ctx.lineWidth = 1;
-		ctx.moveTo(player.x +22,player.y +22);
-		ctx.lineTo(player.attackedX + 22 - player.difLaserX, player.attackedY + 22 - player.difLaserY);
+		ctx.moveTo(550,525);
+		ctx.lineTo(endX + 22, endY + 22);
 		ctx.stroke();
-		calculateDifLaserXY(player);	
 	}
 		
 }
@@ -318,7 +346,8 @@ function calculateDifLaserXY(player){
 		} else player.difLaserY = player.difLaserY + speed;
 	}
 
-	if(player.difLaserX == 0 && player.difLaserY == 0){
+	if(player.difLaserX < speed && player.difLaserY <speed){
+		
 		player.laserDrawn = true;
 	}
 }

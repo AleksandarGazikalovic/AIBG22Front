@@ -35,6 +35,7 @@ export class Character {
 		this.difLaserX = 0;
 		this.difLaserY = 0;
 		this.coefLaser = 1;
+		this.laserDrawn = true;
 		this.setInfoBox();			 	
 	}
 
@@ -53,7 +54,36 @@ export class Character {
 			this.attackedR = null;
 
 		// Prethodni potez:
-	if( Player.q != this.q || Player.r != this.r){
+		var [playerX, playerY] = convertCoordinates(Player.r, Player.q);
+			
+// Slucaj kada se respawnovao ili otisao kroz portal:		
+	if(Math.abs(playerX-this.x)>70 || Math.abs(playerY-this.y)>70){
+		this.moved = true;
+		this.rotated = false;
+
+		this.prevQ = this.q;
+		this.prevR = this.r;
+		[this.prevX, this.prevY] = convertCoordinates(this.prevR, this.prevQ);
+
+		// Trenutni potez: 
+		this.q = Player.q;             
+		this.r = Player.r;
+		[this.x, this.y] = convertCoordinates(this.r, this.q); 
+
+		// Razdaljina za akciju move: 
+		this.difX  = 0;
+		this.difY = 0;
+		this.coefXY = 1;
+		// Resetovanje za laser jer se ne koristi:
+		this.difLaserX = 0;
+		this.difLaserY = 0;
+
+		// Ugao za rotaciju:
+		this.difAngle = 0;
+		this.angle = 0;			
+		
+// Slucaj kada se pomeri:
+	}else if( Player.q != this.q || Player.r != this.r){
 		this.moved = false;
 		this.rotated = false;
 
@@ -75,17 +105,22 @@ export class Character {
 
 		// Ugao za rotaciju:
 		this.difAngle = this.angle;
-		this.angle = find_angle(this.prevR, this.prevQ, this.r, this.q);			
-			
-		} else if(playerAttack != null && playerAttack.playerIdx == this.id){	
-			this.prevQ = this.q;
-		this.prevR = this.r;
-		[this.prevX, this.prevY] = convertCoordinates(this.prevR, this.prevQ);
+		this.angle = find_angle(this.prevR, this.prevQ, this.r, this.q);	
 
-		// Trenutni potez: 
-		this.q = Player.q;             
-		this.r = Player.r;
-		[this.x, this.y] = convertCoordinates(this.r, this.q); 
+		// Resetovanje za laser jer se ne koristi:
+		this.difLaserX = 0;
+		this.difLaserY = 0;		
+		
+// Slucaj kada baca laser:		
+	} else if(playerAttack != null && playerAttack.playerIdx == this.id){	
+			this.prevQ = this.q;
+			this.prevR = this.r;
+			[this.prevX, this.prevY] = convertCoordinates(this.prevR, this.prevQ);
+
+			// Trenutni potez: 
+			this.q = Player.q;             
+			this.r = Player.r;
+			[this.x, this.y] = convertCoordinates(this.r, this.q); 
 			// Ugao za rotaciju:
 			this.difAngle = this.angle;
 			this.attackedQ = playerAttack.q;
