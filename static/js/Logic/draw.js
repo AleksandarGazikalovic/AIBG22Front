@@ -249,6 +249,15 @@ export class Draw{
 				this.drawAttackedTile(player.attackedR, player.attackedQ);
 		}	
 	}
+	drawBossLaserAttack(endR, endQ){	
+		var [endX, endY] = convertCoordinates(endR, endQ);		
+		ctx.beginPath();
+		ctx.strokeStyle = "red";
+		ctx.lineWidth = 1;
+		ctx.moveTo(550,525);
+		ctx.lineTo(endX + 22, endY + 22);
+		ctx.stroke();
+	}
 		
 }
 

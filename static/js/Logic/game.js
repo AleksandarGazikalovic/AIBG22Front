@@ -215,16 +215,18 @@ export class Game {
 			this.drawInstance.drawRotatedPlayer(this.players[i]);
 		}
 		// Crtanje Boss-a:
-		this.drawInstance.drawBoss();
+		
 
 		if(this.bossAction==true){
 			this.attackedTiles.forEach(element => {
+				if(isZoneOne(element))
+					this.drawInstance.drawBossLaserAttack(element.r, element.q);
 				this.drawInstance.drawAttackedTile(element.r, element.q);
 			});
 		}
 		
 		
-		
+		this.drawInstance.drawBoss();
 		
 		if (this.shouldDraw || this.firstRender)  
 			requestAnimationFrame(this.draw.bind(this));
@@ -235,7 +237,10 @@ export class Game {
 	
 	
 } 
-
+function isZoneOne(element){
+	let max = Math.max(Math.abs(element.q), Math.max(Math.abs(element.r), Math.abs(-element.r-element.q)));
+    return ( max < 5 && max>= 2 );
+}
 function drawTiles(map, drawInstance){
 	let cap = 15; 
 	let sgn = 1; 
