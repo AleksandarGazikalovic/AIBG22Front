@@ -53,7 +53,7 @@ export class Game {
 
 	// Kupljenje podataka iz GameState-a:
     update(game, time, playerAttack) {		
-		
+		console.log(game);
 		//Kupimo mapu:	
 		this.map = game.map.tiles;
 		this.bossAction = game.hugoBoss.bossAction;
@@ -110,42 +110,11 @@ export class Game {
 			
 			  for(let i=0;i<3;i++){
 			  	if(game.scoreBoard.players[i].playerIdx == 1){
-			  		document.getElementById(`rt${i+1}`).classList.add("visibility")
-			 		if(i==0){
-			 		 	document.getElementById(`rt${i+2}`).classList.remove("visibility")
-			 		 	document.getElementById(`rt${i+3}`).classList.remove("visibility")
-			 		}
-					if(i==1){
-						document.getElementById(`rt${i}`).classList.remove("visibility")
-						document.getElementById(`rt${i+2}`).classList.remove("visibility")
-					}
-					if(i==2){
-						document.getElementById(`rt${i-1}`).classList.remove("visibility")
-						document.getElementById(`rt${i}`).classList.remove("visibility")
-					}
-
-			  	}
-			  	if(game.scoreBoard.players[i].playerIdx == 2){
-			  		document.getElementById(`rd${i+1}`).classList.add("visibility")
-					if(i==0){
-						document.getElementById(`rd${i+2}`).classList.remove("visibility")
-						document.getElementById(`rd${i+3}`).classList.remove("visibility")
-					}
-					if(i==1){
-						document.getElementById(`rd${i}`).classList.remove("visibility")
-						document.getElementById(`rd${i+2}`).classList.remove("visibility")
-					}
-					if(i==2){
-						document.getElementById(`rd${i-1}`).classList.remove("visibility")
-						document.getElementById(`rd${i}`).classList.remove("visibility")
-					}
-			  	}
-			  	if(game.scoreBoard.players[i].playerIdx == 3){
 			  		document.getElementById(`lt${i+1}`).classList.add("visibility")
-					if(i==0){
-						document.getElementById(`lt${i+2}`).classList.remove("visibility")
-						document.getElementById(`lt${i+3}`).classList.remove("visibility")
-					}
+			 		if(i==0){
+			 		 	document.getElementById(`lt${i+2}`).classList.remove("visibility")
+			 		 	document.getElementById(`lt${i+3}`).classList.remove("visibility")
+			 		}
 					if(i==1){
 						document.getElementById(`lt${i}`).classList.remove("visibility")
 						document.getElementById(`lt${i+2}`).classList.remove("visibility")
@@ -154,8 +123,24 @@ export class Game {
 						document.getElementById(`lt${i-1}`).classList.remove("visibility")
 						document.getElementById(`lt${i}`).classList.remove("visibility")
 					}
+
 			  	}
-			  	if(game.scoreBoard.players[i].playerIdx == 4){
+			  	if(game.scoreBoard.players[i].playerIdx == 2){
+			  		document.getElementById(`rt${i+1}`).classList.add("visibility")
+					if(i==0){
+						document.getElementById(`rt${i+2}`).classList.remove("visibility")
+						document.getElementById(`rt${i+3}`).classList.remove("visibility")
+					}
+					if(i==1){
+						document.getElementById(`rt${i}`).classList.remove("visibility")
+						document.getElementById(`rt${i+2}`).classList.remove("visibility")
+					}
+					if(i==2){
+						document.getElementById(`rt${i-1}`).classList.remove("visibility")
+						document.getElementById(`rt${i}`).classList.remove("visibility")
+					}
+			  	}
+			  	if(game.scoreBoard.players[i].playerIdx == 3){
 			  		document.getElementById(`ld${i+1}`).classList.add("visibility")
 					if(i==0){
 						document.getElementById(`ld${i+2}`).classList.remove("visibility")
@@ -170,27 +155,42 @@ export class Game {
 						document.getElementById(`ld${i}`).classList.remove("visibility")
 					}
 			  	}
+			  	if(game.scoreBoard.players[i].playerIdx == 4){
+			  		document.getElementById(`rd${i+1}`).classList.add("visibility")
+					if(i==0){
+						document.getElementById(`rd${i+2}`).classList.remove("visibility")
+						document.getElementById(`rd${i+3}`).classList.remove("visibility")
+					}
+					if(i==1){
+						document.getElementById(`rd${i}`).classList.remove("visibility")
+						document.getElementById(`rd${i+2}`).classList.remove("visibility")
+					}
+					if(i==2){
+						document.getElementById(`rd${i-1}`).classList.remove("visibility")
+						document.getElementById(`rd${i}`).classList.remove("visibility")
+					}
+			  	}
 			  }
 			  let fourthPlace = game.scoreBoard.players[3];
 			  if(fourthPlace.playerIdx==1){
-				document.getElementById(`rt1`).classList.remove("visibility")
-				document.getElementById(`rt2`).classList.remove("visibility")
-				document.getElementById(`rt3`).classList.remove("visibility")
-			  }
-			  if(fourthPlace.playerIdx==2){
-				document.getElementById(`rd1`).classList.remove("visibility")
-				document.getElementById(`rd2`).classList.remove("visibility")
-				document.getElementById(`rd3`).classList.remove("visibility")
-			  }
-			  if(fourthPlace.playerIdx==3){
 				document.getElementById(`lt1`).classList.remove("visibility")
 				document.getElementById(`lt2`).classList.remove("visibility")
 				document.getElementById(`lt3`).classList.remove("visibility")
 			  }
-			  if(fourthPlace.playerIdx==4){
+			  if(fourthPlace.playerIdx==2){
+				document.getElementById(`rt1`).classList.remove("visibility")
+				document.getElementById(`rt2`).classList.remove("visibility")
+				document.getElementById(`rt3`).classList.remove("visibility")
+			  }
+			  if(fourthPlace.playerIdx==3){
 				document.getElementById(`ld1`).classList.remove("visibility")
 				document.getElementById(`ld2`).classList.remove("visibility")
 				document.getElementById(`ld3`).classList.remove("visibility")
+			  }
+			  if(fourthPlace.playerIdx==4){
+				document.getElementById(`rd1`).classList.remove("visibility")
+				document.getElementById(`rd2`).classList.remove("visibility")
+				document.getElementById(`rd3`).classList.remove("visibility")
 			  }
 	}
 	// Iscrtavanje svih elemenata:
