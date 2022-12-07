@@ -53,7 +53,6 @@ export class Game {
 
 	// Kupljenje podataka iz GameState-a:
     update(game, time, playerAttack) {		
-		console.log(game);
 		//Kupimo mapu:	
 		this.map = game.map.tiles;
 		this.bossAction = game.hugoBoss.bossAction;
@@ -101,13 +100,6 @@ export class Game {
 			 			p=0;
 			 	}
 			}
-			// let f=1
-			// let d = document.getElementById(`rt${f}`)
-			// d.classList.remove("visibility")
-			// console.log(d.classList)
-			
-			
-			
 			  for(let i=0;i<3;i++){
 			  	if(game.scoreBoard.players[i].playerIdx == 1){
 			  		document.getElementById(`lt${i+1}`).classList.add("visibility")
