@@ -41,9 +41,9 @@ var i=44;
 
 // Tipovi entitija: =====================================================================================
 const TileEntity = { // uzima delovi 1, drugi red kako to zna pitate se? ctrl f = 
-    Fence300:   { index: 0 },
-    Fence200:   { index: 1 },
-    Fence100:   { index: 2 },
+    Asteroid300:   { index: 0 },
+    Asteroid200:   { index: 1 },
+    Asteroid100:   { index: 2 },
     WORMHOLE:   { index: 3 },
     BLACKHOLE:  { index: 4 }, 
 	HEALTH :    { index: 5},
@@ -163,15 +163,15 @@ export class Draw{
 		var entityType;
 
 		if(!(entity.type === 'EMPTY' || entity.type === 'BOSS')){		
-            if(entity.type === 'FENCE'){
+            if(entity.type === 'ASTEROID'){
                 if(entity.health > 200){
-					entityType = TileEntity['Fence300'];
+					entityType = TileEntity['Asteroid300'];
                 }
                 if(entity.health >100 && entity.health <= 200){
-                    entityType = TileEntity['Fence200'];
+                    entityType = TileEntity['Asteroid200'];
                 }
                 if(entity.health <= 100 ){
-                    entityType = TileEntity['Fence100'];
+                    entityType = TileEntity['Asteroid100'];
                 }
             } else entityType = TileEntity[entity.type];
 
