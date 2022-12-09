@@ -213,7 +213,9 @@ export class Game {
 		}
 		// Crtanje player-a:
 		for(let i=0;i< 4;i++){
-			this.drawInstance.drawRotatedPlayer(this.players[i]);
+			if(this.players[i] != null){
+				this.drawInstance.drawRotatedPlayer(this.players[i]);
+			}
 		}
 		// Crtanje Boss-a:
 		
