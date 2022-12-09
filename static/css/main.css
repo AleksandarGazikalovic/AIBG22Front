@@ -159,8 +159,8 @@ td.textT.druga {
 td.textT{
     width: 30%;
 }
-td.textT.name{
-    font-size: 2vh;
+td.name{
+    font-size: 1.8vh;
     padding: 10px;
     text-align: center;
 }
@@ -196,11 +196,15 @@ td.textT.name{
     border-radius: 12px;
 }
 th{
-    background: rgba(0, 49, 67, 0.3);
+    background: rgba(0, 49, 67, 0.4);
     height: 40px;
+    text-shadow: 0 0 10px blue;
 }
 .popup table tr:nth-child(odd){
     background-color: rgb(6,116,108, 30%);
+}
+.scoreboard td{
+    text-shadow: 0 0 10px blue;
 }
 .open-popup{
     visibility: visible;
