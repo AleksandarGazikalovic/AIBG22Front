@@ -269,7 +269,7 @@ function convertCoordinates(r, q){
 
 function calculateAngle(player){
 	if(Math.abs(player.angle - player.difAngle) > 2){
-		var speed = 3;
+		var speed = 10;
 		if(player.difAngle>=269 && player.angle<=91) {
 			if(player.difAngle>360) {
 				player.difAngle=player.difAngle-360;
@@ -293,7 +293,7 @@ function calculateAngle(player){
 
 
 function calculateDifXY(player){
-	var speed = 1;
+	var speed = 5;
 
 	if(player.difX > 0){
 		if(player.coefXY <1){
