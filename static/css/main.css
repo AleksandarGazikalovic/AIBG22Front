@@ -59,30 +59,30 @@ main{
 }
 .lt{
     position: absolute;
-    right: 13%;
+    right: 15%;
     top:7%;
-    width: 50px;
+    width: 90px;
     visibility: hidden;
 }
 .rt{
     position: absolute;
-    left: 13%;
+    left: 15%;
     top:7%;
-    width: 50px;
+    width: 90px;
     visibility: hidden;
 }
 .ld{
     position: absolute;
-    right: 13%;
+    right: 15%;
     bottom:7%;
-    width: 50px;
+    width: 90px;
     visibility: hidden;
 }
 .rd{
     position: absolute;
-    left: 13%;
+    left: 15%;
     bottom:7%;
-    width: 50px;
+    width: 90px;
     visibility: hidden;
 }
 .visibility{

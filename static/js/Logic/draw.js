@@ -253,8 +253,8 @@ export class Draw{
 		var [endX, endY] = convertCoordinates(endR, endQ);		
 		ctx.beginPath();
 		ctx.strokeStyle = "red";
-		ctx.lineWidth = 1;
-		ctx.moveTo(550,525);
+		ctx.lineWidth = 3;
+		ctx.moveTo(550,535);
 		ctx.lineTo(endX + 22, endY + 22);
 		ctx.stroke();
 	}
