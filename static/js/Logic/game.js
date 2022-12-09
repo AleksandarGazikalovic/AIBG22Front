@@ -55,8 +55,8 @@ export class Game {
     update(game, time, playerAttack) {		
 		//Kupimo mapu:	
 		this.map = game.map.tiles;
-		this.bossAction = game.hugoBoss.bossAction;
-		this.attackedTiles = game.hugoBoss.bossAttackedTiles;
+		this.bossAction = game.boss.bossAction;
+		this.attackedTiles = game.boss.bossAttackedTiles;
 		this.time = new Timer(time);
 		this.playerAttack = playerAttack;
 		// Ubacujemo igrace: 
@@ -65,10 +65,19 @@ export class Game {
         const Player3 = game.player3 ;
         const Player4 =game.player4 ;
 		if(this.players.length){
-			this.players[0].updatePlayer(Player1, playerAttack);
-			this.players[1].updatePlayer(Player2, playerAttack);
-			this.players[2].updatePlayer(Player3, playerAttack);
-			this.players[3].updatePlayer(Player4, playerAttack);
+			if(Player1 == null){
+				this.players[0] = null;
+			} else this.players[0].updatePlayer(Player1, playerAttack);
+			if(Player2 == null){
+				this.players[1] = null;
+			}else this.players[1].updatePlayer(Player2, playerAttack);
+			
+			if(Player3 == null){
+				this.players[2] = null;
+			} this.players[2].updatePlayer(Player3, playerAttack);
+			if(Player4 == null){
+				this.players[3] = null;
+			} else this.players[3].updatePlayer(Player4, playerAttack);
 
 		} else {
 			this.players = [
@@ -204,7 +213,9 @@ export class Game {
 		}
 		// Crtanje player-a:
 		for(let i=0;i< 4;i++){
-			this.drawInstance.drawRotatedPlayer(this.players[i]);
+			if(this.players[i] != null){
+				this.drawInstance.drawRotatedPlayer(this.players[i]);
+			}
 		}
 		// Crtanje Boss-a:
 		
