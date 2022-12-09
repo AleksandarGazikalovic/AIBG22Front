@@ -74,7 +74,7 @@ export class Game {
 			
 			if(Player3 == null){
 				this.players[2] = null;
-			} this.players[2].updatePlayer(Player3, playerAttack);
+			}else this.players[2].updatePlayer(Player3, playerAttack);
 			if(Player4 == null){
 				this.players[3] = null;
 			} else this.players[3].updatePlayer(Player4, playerAttack);
