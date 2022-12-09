@@ -188,19 +188,19 @@ td.textT.name{
     opacity:0.5;
     color:black;
     font-size: 10px;
-} */
+}  */
 .popup table{
-    background: rgb(123,221,221, 30%);
+    background: rgb(6,116,108, 30%);
     width: 44vw;
     height: 60vh;
     border-radius: 12px;
 }
 th{
-    background: rgba(35, 8, 184, 0.3);
+    background: rgba(0, 49, 67, 0.3);
     height: 40px;
 }
 .popup table tr:nth-child(odd){
-    background-color: rgb(73,73,150, 30%);
+    background-color: rgb(6,116,108, 30%);
 }
 .open-popup{
     visibility: visible;

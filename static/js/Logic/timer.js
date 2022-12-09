@@ -15,7 +15,7 @@ export class Timer{
         countdownEl.innerHTML = `${minutes}: ${seconds}`;
       
         if(minutes == 0 && seconds ==0){
-          openPopup();
+          popup.classList.add("open-popup");
         }
       }
 
